@@ -1,0 +1,427 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Reports &amp; Analytics | Wisdom School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#b8c4ff",
+                        "surface-dim": "#0b1326",
+                        "surface": "#0b1326",
+                        "surface-container": "#171f33",
+                        "on-surface-variant": "#c4c5d5",
+                        "inverse-primary": "#3755c3",
+                        "on-background": "#dae2fd",
+                        "on-tertiary-fixed-variant": "#39485a",
+                        "on-secondary": "#00354a",
+                        "tertiary-container": "#3e4c5e",
+                        "outline-variant": "#444653",
+                        "surface-container-lowest": "#060e20",
+                        "on-tertiary-container": "#adbcd2",
+                        "inverse-on-surface": "#283044",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "on-error": "#690005",
+                        "inverse-surface": "#dae2fd",
+                        "on-primary-fixed-variant": "#173bab",
+                        "surface-container-low": "#131b2e",
+                        "tertiary": "#b9c8de",
+                        "secondary": "#7bd0ff",
+                        "primary-container": "#1e40af",
+                        "on-secondary-fixed": "#001e2c",
+                        "secondary-fixed": "#c4e7ff",
+                        "secondary-container": "#00a6e0",
+                        "on-tertiary": "#233143",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#2d3449",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001453",
+                        "on-tertiary-fixed": "#0d1c2d",
+                        "surface-variant": "#2d3449",
+                        "outline": "#8e909f",
+                        "surface-tint": "#b8c4ff",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "tertiary-fixed": "#d4e4fa",
+                        "background": "#0b1326",
+                        "on-primary-container": "#a8b8ff",
+                        "on-surface": "#dae2fd",
+                        "tertiary-fixed-dim": "#b9c8de",
+                        "surface-bright": "#31394d",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "on-secondary-container": "#00374d",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary": "#002584",
+                        "surface-container-high": "#222a3d",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        .neon-glow {
+            filter: drop-shadow(0 0 8px rgba(184, 196, 255, 0.6));
+        }
+        .neon-glow-secondary {
+            filter: drop-shadow(0 0 8px rgba(123, 208, 255, 0.4));
+        }
+        .glass-icon-container {
+            width: 48px;
+            height: 48px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .glass-icon-crop {
+            object-fit: none;
+            max-width: none;
+        }
+    </style>
+<style data-stitch-cursor=""></style><style data-stitch-scroll-lock=""></style></head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface dark:bg-surface-dim border-r border-outline-variant dark:border-outline flex flex-col py-md z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Wisdom Finance</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Institutional Audit</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="">Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary bg-primary-container/10 text-primary font-semibold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-4 space-y-1">
+<button class="w-full bg-primary text-on-primary font-semibold py-3 rounded-lg flex items-center justify-center gap-2 mb-4 active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="">New Expense</span>
+</button>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="ml-[280px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 w-full bg-surface dark:bg-surface-bright border-b border-outline-variant dark:border-outline flex justify-between items-center h-16 px-gutter">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-full py-1.5 pl-10 pr-4 text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search institutional audits..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<div class="flex items-center gap-3 border-l border-outline-variant pl-6">
+<div class="text-right hidden lg:block">
+<p class="font-label-md text-label-md font-bold text-on-surface">Admin Access</p>
+<p class="font-label-md text-[10px] text-on-surface-variant opacity-70">Super Administrator</p>
+</div>
+<img alt="Administrator Profile" class="w-10 h-10 rounded-full border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy3egS-9zfVeUYpeIozF2NvYAmNUv5KOfJmAaO2yULbkO6vIYYH2BMoGlgTcGNigzk7I__tgp8BsuzBcnoq3_2hO3N5xDNK4U8GceW7WE8hs5TBOkHQDm6saYDPGZrZm-WW2qBRadv3FSVzuyUVgWrKD_3iodWCBlcAiCRBIDDa7r-vt2gi2LKLunISaIfrVtKH0VoKAC_efzNzbzTVSWCseM3ENfZlqyPd5h_5PYBqmuug5OnGW-3lcr8brdZhW9ZoQE63CpPxPE">
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="p-lg flex-1 overflow-y-auto">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Reports &amp; Analytics</h2>
+<p class="text-on-surface-variant mt-1">Institutional expenditure review for Fiscal Year 2024</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-2 px-lg py-2 bg-surface-container-high border border-outline-variant rounded-lg text-primary hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+<span class="font-label-md text-label-md">Export PDF</span>
+</button>
+<button class="flex items-center gap-2 px-lg py-2 bg-surface-container-high border border-outline-variant rounded-lg text-secondary hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="table_chart">table_chart</span>
+<span class="font-label-md text-label-md">Export Excel</span>
+</button>
+</div>
+</div>
+<!-- Bento Layout -->
+<div class="bento-grid">
+<!-- Monthly Trend Line Chart -->
+<section class="col-span-8 bg-surface-container border border-outline-variant rounded-xl p-lg relative overflow-hidden">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-title-md text-title-md">Monthly Expense Trend</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_#b8c4ff]"></span>
+<span class="text-xs text-on-surface-variant">Current Year</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_#7bd0ff]"></span>
+<span class="text-xs text-on-surface-variant">Previous Year</span>
+</div>
+</div>
+</div>
+<div class="h-[320px] w-full flex flex-col">
+<div class="flex-1 w-full relative">
+<!-- Grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between opacity-10">
+<div class="border-t border-on-surface-variant w-full"></div>
+<div class="border-t border-on-surface-variant w-full"></div>
+<div class="border-t border-on-surface-variant w-full"></div>
+<div class="border-t border-on-surface-variant w-full"></div>
+<div class="border-t border-on-surface-variant w-full"></div>
+</div>
+<!-- Trend lines -->
+<svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 300">
+<!-- Prev Year Path with glow -->
+<path class="neon-glow-secondary" d="M0,250 Q100,220 200,240 T400,180 T600,200 T800,140" fill="none" opacity="0.4" stroke="#7bd0ff" stroke-dasharray="4" stroke-width="2"></path>
+<!-- Current Year Path with vibrant glow -->
+<path class="neon-glow" d="M0,280 Q100,240 200,180 T400,140 T600,100 T800,60" fill="none" stroke="#b8c4ff" stroke-width="3"></path>
+<!-- Data points with glow -->
+<circle class="neon-glow" cx="200" cy="180" fill="#b8c4ff" r="5"></circle>
+<circle class="neon-glow" cx="400" cy="140" fill="#b8c4ff" r="5"></circle>
+<circle class="neon-glow" cx="600" cy="100" fill="#b8c4ff" r="5"></circle>
+<circle class="neon-glow" cx="800" cy="60" fill="#b8c4ff" r="5"></circle>
+</svg>
+</div>
+<div class="flex justify-between mt-4 text-[10px] text-on-surface-variant font-mono-data">
+<span class="">JAN</span><span class="">FEB</span><span class="">MAR</span><span class="">APR</span><span class="">MAY</span><span class="">JUN</span><span class="">JUL</span><span class="">AUG</span><span class="">SEP</span><span class="">OCT</span><span class="">NOV</span><span class="">DEC</span>
+</div>
+</div>
+</section>
+<!-- Category Distribution -->
+<section class="col-span-4 bg-surface-container border border-outline-variant rounded-xl p-lg flex flex-col">
+<h3 class="font-title-md text-title-md mb-lg">Allocation by Category</h3>
+<div class="flex-1 flex flex-col justify-center">
+<div class="relative w-48 h-48 mx-auto mb-lg">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#1e40af" stroke-dasharray="40 100" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#7bd0ff" stroke-dasharray="25 100" stroke-dashoffset="-40" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#b9c8de" stroke-dasharray="20 100" stroke-dashoffset="-65" stroke-width="4"></circle>
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#444653" stroke-dasharray="15 100" stroke-dashoffset="-85" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-mono-data text-headline-lg text-primary">₹4.2M</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Total Spent</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span class="text-body-md">Infrastructure</span>
+</div>
+<span class="font-mono-data text-on-surface">40%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-body-md">Payroll</span>
+</div>
+<span class="font-mono-data text-on-surface">25%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-body-md">Academics</span>
+</div>
+<span class="font-mono-data text-on-surface">20%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Transactional Analysis Table -->
+<section class="col-span-12 bg-surface-container border border-outline-variant rounded-xl p-lg overflow-hidden">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-title-md text-title-md">Recent High-Value Transactions</h3>
+<button class="text-primary font-label-md flex items-center gap-1 hover:underline">
+                        View Full Ledger <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="pb-4 font-label-md text-on-surface-variant">ID</th>
+<th class="pb-4 font-label-md text-on-surface-variant">ENTITY / VENDOR</th>
+<th class="pb-4 font-label-md text-on-surface-variant">CATEGORY</th>
+<th class="pb-4 font-label-md text-on-surface-variant">STATUS</th>
+<th class="pb-4 font-label-md text-on-surface-variant text-right">AMOUNT</th>
+</tr>
+</thead>
+<tbody class="font-body-md divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2940</td>
+<td class="py-4 font-semibold text-on-surface">Global Edu Supplies Ltd.</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary text-xs border border-tertiary/20">Academics</span>
+</td>
+<td class="py-4">
+<span class="flex items-center gap-1.5 text-xs text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Verified
+                            </span>
+</td>
+<td class="py-4 text-right font-mono-data text-primary">₹12,450.00</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2941</td>
+<td class="py-4 font-semibold text-on-surface">Precision Lab Equipments</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs border border-secondary/20">Infrastructure</span>
+</td>
+<td class="py-4">
+<span class="flex items-center gap-1.5 text-xs text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Verified
+                            </span>
+</td>
+<td class="py-4 text-right font-mono-data text-primary">₹8,920.00</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2942</td>
+<td class="py-4 font-semibold text-on-surface">Astra Power Systems</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs border border-secondary/20">Utilities</span>
+</td>
+<td class="py-4">
+<span class="flex items-center gap-1.5 text-xs text-error">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Flagged
+                            </span>
+</td>
+<td class="py-4 text-right font-mono-data text-error">₹42,300.00</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2943</td>
+<td class="py-4 font-semibold text-on-surface">City Transit Authority</td>
+<td class="py-4">
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary text-xs border border-tertiary/20">Logistics</span>
+</td>
+<td class="py-4">
+<span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Pending
+                            </span>
+</td>
+<td class="py-4 text-right font-mono-data text-on-surface">₹5,400.00</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- Quick Stats Cards (Bottom Row) -->
+<div class="col-span-12 grid grid-cols-4 gap-4 mt-sm">
+<!-- Cash Reserve -->
+<div class="bg-surface-container border border-outline-variant p-md rounded-xl flex items-center gap-4">
+<div class="glass-icon-container bg-primary-container/20 rounded-lg"><img alt="Monthly Expenditure" class="glass-icon-crop scale-[3.5]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vvJPpbfZfN6tPc0cxo0fSuqJAYaYNUXSrB-BFbkyftA-0cYvcJj--63L-3o_sMb2AdWQcxzjF3zHkhlyLCNJ4UBOojdhGAkLj3_BHegx8Dj6xMPHjg_GhAyXJGQ9F36rtGTM6nvSyhXG10d-FMgoeNPhFaqpKAq-uiIsNRjs57OSFIk1mp5LX77rEYS5Ddh_r2OlanAKnLR4FAfg8NY7zDd7tUP6PBLcFDjvWfZtcyHhzySzwSoek90sZD7oQYmsVym9zVb3Lwc" style="object-position: 12% 16%;"></div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Cash Reserve</p>
+<p class="font-mono-data text-lg text-on-surface">₹2.4M</p>
+</div>
+</div>
+<!-- Monthly Expenditure (Line Chart Icon) -->
+<div class="bg-surface-container border border-outline-variant p-md rounded-xl flex items-center gap-4">
+<div class="glass-icon-container bg-secondary-container/20 rounded-lg relative overflow-hidden"><img alt="Year-to-Date Total" class="glass-icon-crop scale-[3.5]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vvJPpbfZfN6tPc0cxo0fSuqJAYaYNUXSrB-BFbkyftA-0cYvcJj--63L-3o_sMb2AdWQcxzjF3zHkhlyLCNJ4UBOojdhGAkLj3_BHegx8Dj6xMPHjg_GhAyXJGQ9F36rtGTM6nvSyhXG10d-FMgoeNPhFaqpKAq-uiIsNRjs57OSFIk1mp5LX77rEYS5Ddh_r2OlanAKnLR4FAfg8NY7zDd7tUP6PBLcFDjvWfZtcyHhzySzwSoek90sZD7oQYmsVym9zVb3Lwc" style="object-position: 85% 16%;"></div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Yield Variance</p>
+<p class="font-mono-data text-lg text-on-surface">+12.4%</p>
+</div>
+</div>
+<!-- Active Audits (Calculator/Books Icon) -->
+<div class="bg-surface-container border border-outline-variant p-md rounded-xl flex items-center gap-4">
+<div class="glass-icon-container bg-tertiary-container/20 rounded-lg relative overflow-hidden"><img alt="Budget Remaining" class="glass-icon-crop scale-[3.5]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vvJPpbfZfN6tPc0cxo0fSuqJAYaYNUXSrB-BFbkyftA-0cYvcJj--63L-3o_sMb2AdWQcxzjF3zHkhlyLCNJ4UBOojdhGAkLj3_BHegx8Dj6xMPHjg_GhAyXJGQ9F36rtGTM6nvSyhXG10d-FMgoeNPhFaqpKAq-uiIsNRjs57OSFIk1mp5LX77rEYS5Ddh_r2OlanAKnLR4FAfg8NY7zDd7tUP6PBLcFDjvWfZtcyHhzySzwSoek90sZD7oQYmsVym9zVb3Lwc" style="object-position: 50% 84%;"></div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Active Audits</p>
+<p class="font-mono-data text-lg text-on-surface">42</p>
+</div>
+</div>
+<!-- Discrepancies (Progress Ring/Safe Icon) -->
+<div class="bg-surface-container border border-outline-variant p-md rounded-xl flex items-center gap-4">
+<div class="glass-icon-container bg-error-container/20 rounded-lg relative overflow-hidden"><span class="material-symbols-outlined text-error opacity-80 scale-125" data-icon="warning">warning</span></div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Discrepancies</p>
+<p class="font-mono-data text-lg text-error">03</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Background Decoration -->
+<div class="fixed top-0 right-0 -z-10 w-1/2 h-1/2 bg-primary/5 blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-0 left-[280px] -z-10 w-1/3 h-1/3 bg-secondary/5 blur-[120px] pointer-events-none"></div>
+
+
+</body></html>
