@@ -21,10 +21,13 @@ def create_app(config_class=Config):
         from .routes.auth import auth_bp
         app.register_blueprint(auth_bp, url_prefix='/auth')
 
+        from .routes.dashboard import dashboard_bp
+        app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
+
         @app.route('/')
         def index():
             from flask import redirect
-            return redirect('/auth/login')
+            return redirect('/dashboard')
 
         db.create_all()
 

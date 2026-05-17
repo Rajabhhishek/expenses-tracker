@@ -9,8 +9,8 @@ def login():
         return redirect('/') 
     
     if request.method == 'POST':
-        flash('Login functionality will be connected later.', 'info')
-        return redirect('/auth/login')
+        # Bypass real authentication for now, just go to dashboard
+        return redirect('/dashboard')
 
     return render_template('auth/login.html')
 
