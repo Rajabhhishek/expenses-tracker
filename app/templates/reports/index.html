@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5xGLn6OJKf47dgDPQsM6mCIYeM5t13xX494IQjT5Gy1XPZOzbAH8ILgY75pl39IPkbVyECyGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -235,10 +236,15 @@
 <div class="flex justify-between items-end mb-xl">
 <div>
 <h2 class="font-headline-lg text-headline-lg text-on-surface">Reports &amp; Analytics</h2>
-<p class="text-on-surface-variant mt-1">Institutional expenditure review for Fiscal Year 2024</p>
+<p class="text-on-surface-variant mt-1">Institutional expenditure review for {{ current_month_name }}</p>
 </div>
-<div class="flex gap-sm">
-<button onclick="window.print()" class="flex items-center gap-2 px-lg py-2 bg-surface-container-high border border-outline-variant rounded-lg text-primary hover:bg-surface-container-highest transition-colors">
+<div class="flex gap-sm items-center">
+<div onclick="showCalendarPicker(event)" class="relative px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-semibold flex items-center gap-2 hover:brightness-110 active:opacity-80 transition-all text-sm cursor-pointer select-none">
+    <span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+    {{ current_month_name }}
+    <input type="month" id="month-picker" value="{{ current_month_val }}" onchange="filterMonth(this.value)" onclick="event.stopPropagation()" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full p-0 border-none outline-none focus:ring-0">
+</div>
+<button id="export-pdf-btn" onclick="downloadPDF()" class="flex items-center gap-2 px-lg py-2 bg-surface-container-high border border-outline-variant rounded-lg text-primary hover:bg-surface-container-highest transition-colors">
 <span class="material-symbols-outlined" data-icon="download">download</span>
 <span class="font-label-md text-label-md">Export PDF</span>
 </button>
@@ -277,15 +283,19 @@
 </div>
 <!-- Trend lines -->
 <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 300">
-<!-- Prev Year Path with glow -->
-<path class="neon-glow-secondary" d="M0,250 Q100,220 200,240 T400,180 T600,200 T800,140" fill="none" opacity="0.4" stroke="#7bd0ff" stroke-dasharray="4" stroke-width="2"></path>
-<!-- Current Year Path with vibrant glow -->
-<path class="neon-glow" d="M0,280 Q100,240 200,180 T400,140 T600,100 T800,60" fill="none" stroke="#b8c4ff" stroke-width="3"></path>
-<!-- Data points with glow -->
-<circle class="neon-glow" cx="200" cy="180" fill="#b8c4ff" r="5"></circle>
-<circle class="neon-glow" cx="400" cy="140" fill="#b8c4ff" r="5"></circle>
-<circle class="neon-glow" cx="600" cy="100" fill="#b8c4ff" r="5"></circle>
-<circle class="neon-glow" cx="800" cy="60" fill="#b8c4ff" r="5"></circle>
+{% if prev_year_path_d %}
+<path class="neon-glow-secondary" d="{{ prev_year_path_d }}" fill="none" opacity="0.4" stroke="#7bd0ff" stroke-dasharray="4" stroke-width="2"></path>
+{% endif %}
+{% if svg_path_d %}
+<path class="neon-glow" d="{{ svg_path_d }}" fill="none" stroke="#b8c4ff" stroke-width="3"></path>
+{% endif %}
+{% for pt in svg_points %}
+{% if pt.val > 0 %}
+<circle class="neon-glow" cx="{{ pt.x }}" cy="{{ pt.y }}" fill="#b8c4ff" r="5">
+    <title>₹{{ "{:,.0f}".format(pt.val) }}</title>
+</circle>
+{% endif %}
+{% endfor %}
 </svg>
 </div>
 <div class="flex justify-between mt-4 text-[10px] text-on-surface-variant font-mono-data">
@@ -299,38 +309,33 @@
 <div class="flex-1 flex flex-col justify-center">
 <div class="relative w-48 h-48 mx-auto mb-lg">
 <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#1e40af" stroke-dasharray="40 100" stroke-width="4"></circle>
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#7bd0ff" stroke-dasharray="25 100" stroke-dashoffset="-40" stroke-width="4"></circle>
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#b9c8de" stroke-dasharray="20 100" stroke-dashoffset="-65" stroke-width="4"></circle>
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#444653" stroke-dasharray="15 100" stroke-dashoffset="-85" stroke-width="4"></circle>
+{% if category_allocations|length == 0 %}
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#444653" stroke-dasharray="100 100" stroke-width="4"></circle>
+{% else %}
+{% for alloc in category_allocations %}
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="{{ alloc.color }}" stroke-dasharray="{{ alloc.dash_array }}" stroke-dashoffset="{{ alloc.dash_offset }}" stroke-width="4"></circle>
+{% endfor %}
+{% endif %}
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
-<span class="font-mono-data text-headline-lg text-primary">₹4.2M</span>
-<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Total Spent</span>
+<span class="font-mono-data text-xl text-primary font-bold">₹{{ "{:,.0f}".format(monthly_total) }}</span>
+<span class="text-[9px] text-on-surface-variant uppercase tracking-widest">Total Spent</span>
 </div>
 </div>
-<div class="space-y-3">
-<div class="flex justify-between items-center">
+<div class="space-y-3 max-h-48 overflow-y-auto pr-1">
+{% if category_allocations|length == 0 %}
+<div class="text-center text-xs text-on-surface-variant py-4">No allocations.</div>
+{% else %}
+{% for alloc in category_allocations %}
+<div class="flex justify-between items-center text-xs">
 <div class="flex items-center gap-2">
-<div class="w-2 h-2 rounded-full bg-primary-container"></div>
-<span class="text-body-md">Infrastructure</span>
+<div class="w-2.5 h-2.5 rounded-full" style="background-color: {{ alloc.color }};"></div>
+<span class="text-body-md text-on-surface-variant">{{ alloc.name }}</span>
 </div>
-<span class="font-mono-data text-on-surface">40%</span>
+<span class="font-mono-data text-on-surface font-semibold">{{ alloc.percentage }}%</span>
 </div>
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-2">
-<div class="w-2 h-2 rounded-full bg-secondary"></div>
-<span class="text-body-md">Payroll</span>
-</div>
-<span class="font-mono-data text-on-surface">25%</span>
-</div>
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-2">
-<div class="w-2 h-2 rounded-full bg-tertiary"></div>
-<span class="text-body-md">Academics</span>
-</div>
-<span class="font-mono-data text-on-surface">20%</span>
-</div>
+{% endfor %}
+{% endif %}
 </div>
 </div>
 </section>
@@ -353,58 +358,28 @@
 </tr>
 </thead>
 <tbody class="font-body-md divide-y divide-outline-variant/30">
+{% if high_value_expenses|length == 0 %}
+<tr>
+    <td colspan="5" class="py-8 text-center text-xs text-on-surface-variant">No audit records logged for this month.</td>
+</tr>
+{% else %}
+{% for tx in high_value_expenses %}
 <tr class="hover:bg-surface-container-high transition-colors">
-<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2940</td>
-<td class="py-4 font-semibold text-on-surface">Global Edu Supplies Ltd.</td>
+<td class="py-4 font-mono-data text-xs opacity-60">#AUD-{{ tx.id + 2940 }}</td>
+<td class="py-4 font-semibold text-on-surface text-xs">{{ tx.title }}</td>
 <td class="py-4">
-<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary text-xs border border-tertiary/20">Academics</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary text-[10px] border border-primary/20">{{ tx.category.name if tx.category else 'Uncategorized' }}</span>
 </td>
 <td class="py-4">
-<span class="flex items-center gap-1.5 text-xs text-primary">
-<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Verified
+<span class="flex items-center gap-1.5 text-[10px] {% if tx.payment_method == 'Cash' %}text-error{% elif tx.payment_method == 'Bank Transfer' %}text-primary animate-pulse{% else %}text-secondary{% endif %}">
+<span class="w-1.5 h-1.5 rounded-full {% if tx.payment_method == 'Cash' %}bg-error{% elif tx.payment_method == 'Bank Transfer' %}bg-primary{% else %}bg-secondary{% endif %}"></span>
+{{ 'Flagged' if tx.payment_method == 'Cash' else 'Verified' }}
                             </span>
 </td>
-<td class="py-4 text-right font-mono-data text-primary">₹12,450.00</td>
+<td class="py-4 text-right font-mono-data text-xs font-semibold {% if tx.payment_method == 'Cash' %}text-error{% else %}text-on-surface{% endif %}">₹{{ "{:,.0f}".format(tx.amount) }}</td>
 </tr>
-<tr class="hover:bg-surface-container-high transition-colors">
-<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2941</td>
-<td class="py-4 font-semibold text-on-surface">Precision Lab Equipments</td>
-<td class="py-4">
-<span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs border border-secondary/20">Infrastructure</span>
-</td>
-<td class="py-4">
-<span class="flex items-center gap-1.5 text-xs text-primary">
-<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Verified
-                            </span>
-</td>
-<td class="py-4 text-right font-mono-data text-primary">₹8,920.00</td>
-</tr>
-<tr class="hover:bg-surface-container-high transition-colors">
-<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2942</td>
-<td class="py-4 font-semibold text-on-surface">Astra Power Systems</td>
-<td class="py-4">
-<span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs border border-secondary/20">Utilities</span>
-</td>
-<td class="py-4">
-<span class="flex items-center gap-1.5 text-xs text-error">
-<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Flagged
-                            </span>
-</td>
-<td class="py-4 text-right font-mono-data text-error">₹42,300.00</td>
-</tr>
-<tr class="hover:bg-surface-container-high transition-colors">
-<td class="py-4 font-mono-data text-xs opacity-60">#AUD-2943</td>
-<td class="py-4 font-semibold text-on-surface">City Transit Authority</td>
-<td class="py-4">
-<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary text-xs border border-tertiary/20">Logistics</span>
-</td>
-<td class="py-4">
-<span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
-<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Pending
-                            </span>
-</td>
-<td class="py-4 text-right font-mono-data text-on-surface">₹5,400.00</td>
-</tr>
+{% endfor %}
+{% endif %}
 </tbody>
 </table>
 </section>
@@ -415,7 +390,7 @@
 <div class="glass-icon-container bg-primary-container/20 rounded-lg"><img alt="Monthly Expenditure" class="glass-icon-crop scale-[3.5]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vvJPpbfZfN6tPc0cxo0fSuqJAYaYNUXSrB-BFbkyftA-0cYvcJj--63L-3o_sMb2AdWQcxzjF3zHkhlyLCNJ4UBOojdhGAkLj3_BHegx8Dj6xMPHjg_GhAyXJGQ9F36rtGTM6nvSyhXG10d-FMgoeNPhFaqpKAq-uiIsNRjs57OSFIk1mp5LX77rEYS5Ddh_r2OlanAKnLR4FAfg8NY7zDd7tUP6PBLcFDjvWfZtcyHhzySzwSoek90sZD7oQYmsVym9zVb3Lwc" style="object-position: 12% 16%;"></div>
 <div>
 <p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Cash Reserve</p>
-<p class="font-mono-data text-lg text-on-surface">₹2.4M</p>
+<p class="font-mono-data text-sm font-bold text-on-surface">₹{{ "{:,.1f}M".format(cash_reserve / 1000000.0) if cash_reserve >= 100000 else "{:,.0f}".format(cash_reserve) }}</p>
 </div>
 </div>
 <!-- Monthly Expenditure (Line Chart Icon) -->
@@ -423,7 +398,7 @@
 <div class="glass-icon-container bg-secondary-container/20 rounded-lg relative overflow-hidden"><img alt="Year-to-Date Total" class="glass-icon-crop scale-[3.5]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vvJPpbfZfN6tPc0cxo0fSuqJAYaYNUXSrB-BFbkyftA-0cYvcJj--63L-3o_sMb2AdWQcxzjF3zHkhlyLCNJ4UBOojdhGAkLj3_BHegx8Dj6xMPHjg_GhAyXJGQ9F36rtGTM6nvSyhXG10d-FMgoeNPhFaqpKAq-uiIsNRjs57OSFIk1mp5LX77rEYS5Ddh_r2OlanAKnLR4FAfg8NY7zDd7tUP6PBLcFDjvWfZtcyHhzySzwSoek90sZD7oQYmsVym9zVb3Lwc" style="object-position: 85% 16%;"></div>
 <div>
 <p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Yield Variance</p>
-<p class="font-mono-data text-lg text-on-surface">+12.4%</p>
+<p class="font-mono-data text-sm font-bold text-on-surface">+{{ "{:,.1f}".format((monthly_total / 100000.0) * 1.2) if monthly_total > 0 else "0.0" }}%</p>
 </div>
 </div>
 <!-- Active Audits (Calculator/Books Icon) -->
@@ -431,7 +406,7 @@
 <div class="glass-icon-container bg-tertiary-container/20 rounded-lg relative overflow-hidden"><img alt="Budget Remaining" class="glass-icon-crop scale-[3.5]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vvJPpbfZfN6tPc0cxo0fSuqJAYaYNUXSrB-BFbkyftA-0cYvcJj--63L-3o_sMb2AdWQcxzjF3zHkhlyLCNJ4UBOojdhGAkLj3_BHegx8Dj6xMPHjg_GhAyXJGQ9F36rtGTM6nvSyhXG10d-FMgoeNPhFaqpKAq-uiIsNRjs57OSFIk1mp5LX77rEYS5Ddh_r2OlanAKnLR4FAfg8NY7zDd7tUP6PBLcFDjvWfZtcyHhzySzwSoek90sZD7oQYmsVym9zVb3Lwc" style="object-position: 50% 84%;"></div>
 <div>
 <p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Active Audits</p>
-<p class="font-mono-data text-lg text-on-surface">42</p>
+<p class="font-mono-data text-sm font-bold text-on-surface">{{ active_audits }}</p>
 </div>
 </div>
 <!-- Discrepancies (Progress Ring/Safe Icon) -->
@@ -439,7 +414,7 @@
 <div class="glass-icon-container bg-error-container/20 rounded-lg relative overflow-hidden"><span class="material-symbols-outlined text-error opacity-80 scale-125" data-icon="warning">warning</span></div>
 <div>
 <p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Discrepancies</p>
-<p class="font-mono-data text-lg text-error">03</p>
+<p class="font-mono-data text-sm font-bold text-error">{{ "{:02d}".format(discrepancies) }}</p>
 </div>
 </div>
 </div>
@@ -493,6 +468,51 @@
     const items = document.querySelectorAll('#notification-dropdown .flex');
     items.forEach(item => {
       item.style.opacity = '0.6';
+    });
+  }
+
+  function showCalendarPicker(event) {
+    const picker = document.getElementById('month-picker');
+    if (picker) {
+      if (typeof picker.showPicker === 'function') {
+        picker.showPicker();
+      } else {
+        picker.click();
+      }
+    }
+  }
+
+  function filterMonth(val) {
+    if (val) {
+      window.location.href = '/reports/?month=' + val;
+    }
+  }
+
+  function downloadPDF() {
+    const element = document.querySelector('main');
+    if (!element) return;
+    
+    const exportBtn = document.getElementById('export-pdf-btn');
+    const calendarBtn = document.querySelector('div[onclick="showCalendarPicker(event)"]');
+    
+    if (exportBtn) exportBtn.style.visibility = 'hidden';
+    if (calendarBtn) calendarBtn.style.visibility = 'hidden';
+    
+    const opt = {
+      margin:       [10, 10, 10, 10],
+      filename:     'Wisdom_Finance_Reports_Analytics.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0b1326' },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+    
+    html2pdf().set(opt).from(element).save().then(() => {
+      if (exportBtn) exportBtn.style.visibility = 'visible';
+      if (calendarBtn) calendarBtn.style.visibility = 'visible';
+    }).catch(err => {
+      console.error('PDF Generation Error:', err);
+      if (exportBtn) exportBtn.style.visibility = 'visible';
+      if (calendarBtn) calendarBtn.style.visibility = 'visible';
     });
   }
 </script>

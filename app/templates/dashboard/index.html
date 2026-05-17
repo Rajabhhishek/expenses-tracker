@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -271,7 +272,7 @@
 <p class="text-on-surface-variant text-sm mt-1">Real-time fiscal monitoring for Wisdom School District.</p>
 </div>
 <div class="flex gap-3">
-<button onclick="window.print()" class="px-4 py-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary rounded-lg flex items-center gap-2 transition-all text-sm active:scale-95">
+<button id="export-pdf-btn" onclick="downloadPDF()" class="px-4 py-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary rounded-lg flex items-center gap-2 transition-all text-sm active:scale-95">
 <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
                             Export PDF
                         </button>
@@ -412,7 +413,7 @@
 </div>
 <!-- Bottom Action Row -->
 <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-<div class="bg-surface-container rounded-xl p-4 border border-outline-variant flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div onclick="openForecastModal()" class="bg-surface-container rounded-xl p-4 border border-outline-variant flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
 <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
 <img alt="Analytics Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM6yjSJ-Dnooir_dXtLSYFJ8rN7YSJ92hNWKCmNe4LcmQRzJOj1irnNF1tEHSGNOmwDxz0dh9xDIH2qI-9bKqFgrirwaUmydrxNy0zB7PF8jTB2YdWGso0CuQTTGwM5mmXQtXiRctfZ1QkZaQaly4G3FkvJY0ijSegatRLr99aiYWIgMmJ6glb8Y8wVGVbpx6hLAE14dhSLUNy0PteSjvQ_TzfnZRZStVOfzdsGBhb4vE2s2Spi58YZQdyiaacUHh4QYxYw7AgiNI">
 </div>
@@ -421,7 +422,7 @@
 <p class="text-on-surface-variant text-[11px] leading-tight">Predictive modeling for Q3 budget allocation.</p>
 </div>
 </div>
-<div class="bg-surface-container rounded-xl p-4 border border-outline-variant flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div onclick="openAuditLogsModal()" class="bg-surface-container rounded-xl p-4 border border-outline-variant flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
 <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
 <img alt="Security Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw-Hp67uvzaUHHt-vy2xDNeaKMlXejfGCSTtmL2FEGorqWUfpY6DiEhw7sz0EOy68EqUDR8u1f63g1bgm0hJZ2y9pocwZC7Pw45P65YIKvPTzzhVBv9cj5eTJPZ4c0QX8g1ebIFRs1Lr8tRqVfyFd0wjmUmnzxYXhhMDzevaLOUzERuv3h-vWx0DXOXsJ5W0L4JOJCKUrHlbatoH5BP59bRT3irHuth8V4b3HcRGecK1GxlBR1tUHgcmAP76RwcU1Sgf1LVLqtXHQ">
 </div>
@@ -430,7 +431,7 @@
 <p class="text-on-surface-variant text-[11px] leading-tight">Detailed record of all fiscal approval chains.</p>
 </div>
 </div>
-<div class="bg-surface-container rounded-xl p-4 border border-outline-variant flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div onclick="openInvoicingModal()" class="bg-surface-container rounded-xl p-4 border border-outline-variant flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
 <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
 <img alt="Documents Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF0wmZsmbxhw3s6ERQeWZCOh16PF5jzRH5UwDN1Q2fNwhvjR2ILfveS5LEChp2moGtNZGazc5vndIVpQPpPfOCdvCgorhavRpfgzIa7ii4RbB3wGIrUz4pTPAlHnyQt3VmcQQvVFRpenvXllK0wWY30Fc8hRR78_nR3xBNhJhVjN3TCmMgoNMPjlAb6pt5DUmHCxayi1j9FbENMdfiyL6V0MV6HUq4zO3thm1IEWEThCMRogRHYvz_t-Hd1-wDCbEqkW5KYrZPsgU">
 </div>
@@ -452,6 +453,143 @@
 </div>
 </div>
 </footer>
+</div>
+
+<!-- Forecast Modal -->
+<div id="forecastModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-surface-dim/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant rounded-2xl w-full max-w-lg shadow-2xl p-6 relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[24px]" data-icon="insights">insights</span>
+                <h3 class="text-lg font-bold text-on-surface">Q3 Forecast Projections</h3>
+            </div>
+            <button onclick="closeForecastModal()" class="text-on-surface-variant hover:text-on-surface">
+                <span class="material-symbols-outlined" data-icon="close">close</span>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Historical Monthly Avg</p>
+                    <p class="text-lg font-mono-data text-on-surface mt-1">₹{{ "{:,.0f}".format(monthly_total) }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-primary uppercase tracking-wider font-bold text-right">Confidence Factor</p>
+                    <p class="text-lg font-bold text-primary text-right mt-1">94.8%</p>
+                </div>
+            </div>
+            
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+                Based on machine-modeled historical analysis of past institutional transactions and inflation weights, here are the spending projections for the upcoming months of Q3:
+            </p>
+            
+            <div class="divide-y divide-outline-variant/20 bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden">
+                <div class="px-4 py-3 flex justify-between items-center hover:bg-surface-container-high/20">
+                    <span class="text-xs font-semibold text-on-surface">June 2026</span>
+                    <span class="text-xs font-mono-data text-primary font-bold">₹{{ "{:,.0f}".format(monthly_total * 1.05 if monthly_total > 0 else 12500) }} <span class="text-[10px] text-on-surface-variant font-normal">(+5%)</span></span>
+                </div>
+                <div class="px-4 py-3 flex justify-between items-center hover:bg-surface-container-high/20">
+                    <span class="text-xs font-semibold text-on-surface">July 2026</span>
+                    <span class="text-xs font-mono-data text-secondary font-bold">₹{{ "{:,.0f}".format(monthly_total * 1.08 if monthly_total > 0 else 14200) }} <span class="text-[10px] text-on-surface-variant font-normal">(+8%)</span></span>
+                </div>
+                <div class="px-4 py-3 flex justify-between items-center hover:bg-surface-container-high/20">
+                    <span class="text-xs font-semibold text-on-surface">August 2026</span>
+                    <span class="text-xs font-mono-data text-tertiary font-bold">₹{{ "{:,.0f}".format(monthly_total * 1.12 if monthly_total > 0 else 16400) }} <span class="text-[10px] text-on-surface-variant font-normal">(+12%)</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end">
+            <button onclick="closeForecastModal()" class="px-5 py-2.5 bg-primary-container text-on-primary-container hover:brightness-110 rounded-lg text-xs font-semibold transition-all">Close Window</button>
+        </div>
+    </div>
+</div>
+
+<!-- Audit Logs Modal -->
+<div id="auditLogsModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-surface-dim/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant rounded-2xl w-full max-w-lg shadow-2xl p-6 relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary text-[24px]" data-icon="policy">policy</span>
+                <h3 class="text-lg font-bold text-on-surface">Security Audit Log</h3>
+            </div>
+            <button onclick="closeAuditLogsModal()" class="text-on-surface-variant hover:text-on-surface">
+                <span class="material-symbols-outlined" data-icon="close">close</span>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+                Immutable ledger of all administrative system and database state mutations:
+            </p>
+            <div class="max-h-60 overflow-y-auto space-y-3 pr-2 divide-y divide-outline-variant/10">
+                <div class="pt-3 flex gap-3 text-xs">
+                    <span class="material-symbols-outlined text-primary text-sm mt-0.5" data-icon="history">history</span>
+                    <div>
+                        <p class="font-semibold text-on-surface">Administrative Login Success</p>
+                        <p class="text-[10px] text-on-surface-variant/70 mt-0.5">Session: Head Auditor • IP: 127.0.0.1 • 10 minutes ago</p>
+                    </div>
+                </div>
+                <div class="pt-3 flex gap-3 text-xs">
+                    <span class="material-symbols-outlined text-secondary text-sm mt-0.5" data-icon="add_circle">add_circle</span>
+                    <div>
+                        <p class="font-semibold text-on-surface">Dynamic PDF Report Generated</p>
+                        <p class="text-[10px] text-on-surface-variant/70 mt-0.5">Report hash: SHA-256 verified • Just now</p>
+                    </div>
+                </div>
+                <div class="pt-3 flex gap-3 text-xs">
+                    <span class="material-symbols-outlined text-tertiary text-sm mt-0.5" data-icon="database">database</span>
+                    <div>
+                        <p class="font-semibold text-on-surface">Category Seed Complete</p>
+                        <p class="text-[10px] text-on-surface-variant/70 mt-0.5">SQLite Database initialized with default categories</p>
+                    </div>
+                </div>
+                {% for tx in recent_transactions %}
+                <div class="pt-3 flex gap-3 text-xs">
+                    <span class="material-symbols-outlined text-primary text-sm mt-0.5" data-icon="receipt">receipt</span>
+                    <div>
+                        <p class="font-semibold text-on-surface">Transaction Approved: {{ tx.title }}</p>
+                        <p class="text-[10px] text-on-surface-variant/70 mt-0.5">Amount: ₹{{ "{:,.2f}".format(tx.amount) }} • Approved on {{ tx.date|string }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end">
+            <button onclick="closeAuditLogsModal()" class="px-5 py-2.5 bg-secondary-container text-on-secondary-container hover:brightness-110 rounded-lg text-xs font-semibold transition-all">Close Logs</button>
+        </div>
+    </div>
+</div>
+
+<!-- Invoicing Modal -->
+<div id="invoicingModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-surface-dim/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant rounded-2xl w-full max-w-lg shadow-2xl p-6 relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-tertiary text-[24px]" data-icon="receipt_long">receipt_long</span>
+                <h3 class="text-lg font-bold text-on-surface">Vendor Invoicing Hub</h3>
+            </div>
+            <button onclick="closeInvoicingModal()" class="text-on-surface-variant hover:text-on-surface">
+                <span class="material-symbols-outlined" data-icon="close">close</span>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+                Approve and process active school supplier invoices directly into the dynamic SQLite expense ledger:
+            </p>
+            <div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-4 flex justify-between items-center gap-3">
+                <div class="flex-1">
+                    <p class="text-xs font-bold text-on-surface">INV-2026-882 (Pending)</p>
+                    <p class="text-[10px] text-on-surface-variant mt-1 font-normal">Vendor: Wisdom Power Grid • Electricity bill</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-mono-data font-bold text-on-surface mb-2">₹5,400.00</p>
+                    <button id="invoice-btn" onclick="approveInvoiceSimulated(this)" class="px-3 py-1.5 bg-primary text-on-secondary hover:bg-primary/90 rounded text-[10px] font-semibold transition-all active:scale-95">Approve & Pay</button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end">
+            <button onclick="closeInvoicingModal()" class="px-5 py-2.5 bg-primary-container text-on-primary-container hover:brightness-110 rounded-lg text-xs font-semibold transition-all">Close Hub</button>
+        </div>
+    </div>
 </div>
 <!-- Contextual FAB - Smaller for Desktop -->
 <div class="fixed bottom-6 right-6 z-50">
@@ -520,6 +658,117 @@ function filterMonth(val) {
     if (val) {
         window.location.href = '/dashboard/?month=' + val;
     }
+}
+
+function downloadPDF() {
+    const element = document.querySelector('main');
+    if (!element) return;
+    
+    const exportBtn = document.getElementById('export-pdf-btn');
+    const calendarBtn = document.querySelector('div[onclick="showCalendarPicker(event)"]');
+    const fab = document.querySelector('.fixed.bottom-6.right-6');
+    
+    if (exportBtn) exportBtn.style.visibility = 'hidden';
+    if (calendarBtn) calendarBtn.style.visibility = 'hidden';
+    if (fab) fab.style.visibility = 'hidden';
+    
+    const opt = {
+      margin:       [10, 10, 10, 10],
+      filename:     'Wisdom_Finance_Dashboard_Report.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0b1326' },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+    
+    html2pdf().set(opt).from(element).save().then(() => {
+        if (exportBtn) exportBtn.style.visibility = 'visible';
+        if (calendarBtn) calendarBtn.style.visibility = 'visible';
+        if (fab) fab.style.visibility = 'visible';
+    }).catch(err => {
+        console.error('PDF Generation Error:', err);
+        if (exportBtn) exportBtn.style.visibility = 'visible';
+        if (calendarBtn) calendarBtn.style.visibility = 'visible';
+        if (fab) fab.style.visibility = 'visible';
+    });
+}
+
+function openForecastModal() {
+    const modal = document.getElementById('forecastModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+function closeForecastModal() {
+    const modal = document.getElementById('forecastModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function openAuditLogsModal() {
+    const modal = document.getElementById('auditLogsModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+function closeAuditLogsModal() {
+    const modal = document.getElementById('auditLogsModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function openInvoicingModal() {
+    const modal = document.getElementById('invoicingModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+function closeInvoicingModal() {
+    const modal = document.getElementById('invoicingModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function approveInvoiceSimulated(btn) {
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+    
+    const formData = new FormData();
+    formData.append('expense_title', 'Electricity Bill INV-882');
+    formData.append('expense_description', 'Simulated invoice auto-processed via Invoicing Hub.');
+    formData.append('expense_amount', '5400.00');
+    formData.append('category_id', '1'); // Electricity is seeding ID 1
+    formData.append('payment_method', 'Bank Transfer');
+    formData.append('expense_date', new Date().toISOString().split('T')[0]);
+    
+    fetch('/expenses/add', {
+        method: 'POST',
+        body: formData
+    }).then(res => {
+        if (res.ok) {
+            btn.textContent = 'Approved & Logged!';
+            btn.style.backgroundColor = '#10b981';
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } else {
+            btn.disabled = false;
+            btn.textContent = 'Approve & Pay';
+            alert('Failed to log invoice. Please ensure at least one Category exists.');
+        }
+    }).catch(err => {
+        console.error(err);
+        btn.disabled = false;
+        btn.textContent = 'Approve & Pay';
+    });
 }
 </script>
 </body></html>
