@@ -24,10 +24,23 @@ def create_app(config_class=Config):
         from .routes.dashboard import dashboard_bp
         app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
 
+        from .routes.reports import reports_bp
+        app.register_blueprint(reports_bp, url_prefix='/reports')
+
+        from .routes.expenses import expenses_bp
+        app.register_blueprint(expenses_bp, url_prefix='/expenses')
+
+        from .routes.categories import categories_bp
+        app.register_blueprint(categories_bp, url_prefix='/categories')
+
         @app.route('/')
         def index():
             from flask import redirect
             return redirect('/dashboard')
+
+        @app.route('/favicon.ico')
+        def favicon():
+            return '', 204
 
         db.create_all()
 

@@ -1,0 +1,468 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Expenses Management | Wisdom School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#b8c4ff",
+                        "surface-dim": "#0b1326",
+                        "surface": "#0b1326",
+                        "surface-container": "#171f33",
+                        "on-surface-variant": "#c4c5d5",
+                        "inverse-primary": "#3755c3",
+                        "on-background": "#dae2fd",
+                        "on-tertiary-fixed-variant": "#39485a",
+                        "on-secondary": "#00354a",
+                        "tertiary-container": "#3e4c5e",
+                        "outline-variant": "#444653",
+                        "surface-container-lowest": "#060e20",
+                        "on-tertiary-container": "#adbcd2",
+                        "inverse-on-surface": "#283044",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "on-error": "#690005",
+                        "inverse-surface": "#dae2fd",
+                        "on-primary-fixed-variant": "#173bab",
+                        "surface-container-low": "#131b2e",
+                        "tertiary": "#b9c8de",
+                        "secondary": "#7bd0ff",
+                        "primary-container": "#1e40af",
+                        "on-secondary-fixed": "#001e2c",
+                        "secondary-fixed": "#c4e7ff",
+                        "secondary-container": "#00a6e0",
+                        "on-tertiary": "#233143",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#2d3449",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001453",
+                        "on-tertiary-fixed": "#0d1c2d",
+                        "surface-variant": "#2d3449",
+                        "outline": "#8e909f",
+                        "surface-tint": "#b8c4ff",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "tertiary-fixed": "#d4e4fa",
+                        "background": "#0b1326",
+                        "on-primary-container": "#a8b8ff",
+                        "on-surface": "#dae2fd",
+                        "tertiary-fixed-dim": "#b9c8de",
+                        "surface-bright": "#31394d",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "on-secondary-container": "#00374d",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary": "#002584",
+                        "surface-container-high": "#222a3d",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px"
+                     },
+                     "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                     },
+                     "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                     }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+        }
+        .bento-card {
+            border: 1px solid #2d3449;
+            background: #171f33;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            border-color: #b8c4ff;
+            background: #1e293b;
+        }
+        .glass-modal {
+            background: rgba(23, 31, 51, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface border-r border-outline-variant flex flex-col py-md z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Wisdom Finance</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Institutional Audit</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/dashboard">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary bg-primary-container/10 text-primary font-semibold transition-colors duration-200" href="/expenses">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="">Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/categories">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/reports">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-4 space-y-1">
+<button onclick="openAddModal()" class="w-full bg-primary text-on-primary font-semibold py-3 rounded-lg flex items-center justify-center gap-2 mb-4 active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="">New Expense</span>
+</button>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/auth/logout">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="ml-[280px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 w-full bg-surface border-b border-outline-variant flex justify-between items-center h-16 px-gutter">
+<div class="flex items-center gap-4 flex-1">
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<div class="flex items-center gap-3 border-l border-outline-variant pl-6">
+<div class="text-right hidden lg:block">
+<p class="font-label-md text-label-md font-bold text-on-surface">Admin Access</p>
+<p class="font-label-md text-[10px] text-on-surface-variant opacity-70">Super Administrator</p>
+</div>
+<img alt="Administrator Profile" class="w-10 h-10 rounded-full border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy3egS-9zfVeUYpeIozF2NvYAmNUv5KOfJmAaO2yULbkO6vIYYH2BMoGlgTcGNigzk7I__tgp8BsuzBcnoq3_2hO3N5xDNK4U8GceW7WE8hs5TBOkHQDm6saYDPGZrZm-WW2qBRadv3FSVzuyUVgWrKD_3iodWCBlcAiCRBIDDa7r-vt2gi2LKLunISaIfrVtKH0VoKAC_efzNzbzTVSWCseM3ENfZlqyPd5h_5PYBqmuug5OnGW-3lcr8brdZhW9ZoQE63CpPxPE">
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="p-lg flex-1 overflow-y-auto">
+<div class="max-w-[1200px] mx-auto">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Expenses Ledger</h2>
+<p class="text-on-surface-variant mt-1">Audit, search, and manage individual expense transactions.</p>
+</div>
+<button onclick="openAddModal()" class="px-6 py-2.5 bg-primary text-on-secondary hover:bg-primary/95 rounded-lg font-semibold flex items-center gap-2 hover:brightness-110 active:opacity-80 transition-all text-sm">
+  <span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+  Record New Expense
+</button>
+</div>
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="mb-6 space-y-2">
+      {% for category, message in messages %}
+        <div class="p-4 rounded-lg border {% if category == 'error' %}bg-error/10 border-error text-error{% else %}bg-primary/10 border-primary text-primary{% endif %} text-sm">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+<!-- Search & Filter Card -->
+<div class="bento-card rounded-xl p-6 mb-8">
+  <form method="GET" action="{{ url_for('expenses.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <!-- Search Title -->
+    <div>
+      <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Search Text</label>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+        <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-10 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="search" placeholder="Search by title/description..." value="{{ search_query }}" type="text">
+      </div>
+    </div>
+    <!-- Filter Category -->
+    <div>
+      <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Category</label>
+      <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="category">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if selected_category|string == cat.id|string %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <!-- Filter Payment Method -->
+    <div>
+      <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Payment Method</label>
+      <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="payment_method">
+        <option value="">All Methods</option>
+        <option value="Cash" {% if selected_payment_method == 'Cash' %}selected{% endif %}>Cash</option>
+        <option value="Card" {% if selected_payment_method == 'Card' %}selected{% endif %}>Card</option>
+        <option value="Bank Transfer" {% if selected_payment_method == 'Bank Transfer' %}selected{% endif %}>Bank Transfer</option>
+        <option value="UPI" {% if selected_payment_method == 'UPI' %}selected{% endif %}>UPI</option>
+      </select>
+    </div>
+    <!-- Submit Filters -->
+    <div class="flex items-end">
+      <button type="submit" class="w-full bg-surface-container-highest hover:bg-surface-container-highest/80 border border-outline-variant text-on-surface font-semibold py-2.5 rounded-lg text-sm transition-all">
+        Apply Filters
+      </button>
+    </div>
+  </form>
+</div>
+<!-- Expense Ledger Table -->
+<section class="bento-card rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 flex items-center justify-between">
+<h3 class="text-lg font-bold text-on-surface">Transactions History</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-y border-outline-variant bg-surface-container-low/50">
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">TITLE</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">CATEGORY</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">METHOD</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">DATE</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">RECEIPT</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase text-right">AMOUNT</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase text-right">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+{% if not expenses %}
+<tr>
+  <td colspan="7" class="px-6 py-10 text-center text-on-surface-variant italic">No expenses found matching the criteria.</td>
+</tr>
+{% endif %}
+{% for exp in expenses %}
+<tr class="hover:bg-surface-container-highest/30 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-on-surface font-semibold text-sm">{{ exp.title }}</span>
+{% if exp.description %}
+<span class="text-[11px] text-on-surface-variant mt-0.5 max-w-[200px] truncate" title="{{ exp.description }}">{{ exp.description }}</span>
+{% endif %}
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">{{ exp.category.name }}</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm font-semibold">{{ exp.payment_method }}</td>
+<td class="px-6 py-4 text-on-surface-variant font-mono-data text-sm">{{ exp.expense_date.strftime('%b %d, %Y') }}</td>
+<td class="px-6 py-4">
+  {% if exp.receipt_path %}
+    <a href="{{ url_for('static', filename=exp.receipt_path) }}" target="_blank" class="text-primary hover:underline text-xs flex items-center gap-1">
+      <span class="material-symbols-outlined text-sm">attachment</span> View Receipt
+    </a>
+  {% else %}
+    <span class="text-on-surface-variant/40 text-xs italic">None</span>
+  {% endif %}
+</td>
+<td class="px-6 py-4 text-right font-mono-data text-primary font-bold text-sm">₹{{ "{:,.2f}".format(exp.amount) }}</td>
+<td class="px-6 py-4 text-right">
+  <div class="flex justify-end gap-2">
+    <button onclick="openEditModal({{ exp.id }}, '{{ exp.title }}', '{{ exp.description }}', {{ exp.amount }}, {{ exp.category_id }}, '{{ exp.payment_method }}', '{{ exp.expense_date.strftime('%Y-%m-%d') }}')" class="text-primary hover:bg-primary/10 p-1.5 rounded transition-colors">
+      <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+    </button>
+    <form action="{{ url_for('expenses.delete', id=exp.id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this expense?');">
+      <button type="submit" class="text-error hover:bg-error/10 p-1.5 rounded transition-colors">
+        <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
+      </button>
+    </form>
+  </div>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Background Decoration -->
+<div class="fixed top-0 right-0 -z-10 w-1/2 h-1/2 bg-primary/5 blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-0 left-[280px] -z-10 w-1/3 h-1/3 bg-secondary/5 blur-[120px] pointer-events-none"></div>
+<!-- Add Modal -->
+<div id="addModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+  <div class="glass-modal w-full max-w-[500px] p-6 rounded-2xl border border-outline-variant relative">
+    <button onclick="closeAddModal()" class="absolute right-4 top-4 text-on-surface-variant hover:text-on-surface">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h3 class="text-lg font-bold text-on-surface mb-6">Record New Expense</h3>
+    <form action="{{ url_for('expenses.add') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Expense Title *</label>
+          <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="title" required placeholder="e.g., Lab supplies purchase">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Amount (₹) *</label>
+          <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="amount" type="number" step="0.01" required placeholder="0.00">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Expense Date *</label>
+          <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="expense_date" type="date" required value="{{ datetime.utcnow().strftime('%Y-%m-%d') }}">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Category *</label>
+          <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="category_id" required>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Payment Method *</label>
+          <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="payment_method" required>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="UPI">UPI</option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Receipt Document</label>
+          <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-xs" name="receipt" type="file" accept="image/*,application/pdf">
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Description</label>
+          <textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="description" rows="3" placeholder="Provide extra detail here..."></textarea>
+        </div>
+      </div>
+      <button type="submit" class="w-full bg-primary hover:bg-primary/95 text-on-secondary font-bold py-3 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all text-sm">
+        <span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+        Record Expense
+      </button>
+    </form>
+  </div>
+</div>
+<!-- Edit Modal -->
+<div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+  <div class="glass-modal w-full max-w-[500px] p-6 rounded-2xl border border-outline-variant relative">
+    <button onclick="closeEditModal()" class="absolute right-4 top-4 text-on-surface-variant hover:text-on-surface">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h3 class="text-lg font-bold text-on-surface mb-6">Modify Expense Details</h3>
+    <form id="editForm" action="" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Expense Title *</label>
+          <input id="editTitle" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="title" required placeholder="e.g., Lab supplies purchase">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Amount (₹) *</label>
+          <input id="editAmount" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="amount" type="number" step="0.01" required placeholder="0.00">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Expense Date *</label>
+          <input id="editDate" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="expense_date" type="date" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Category *</label>
+          <select id="editCategory" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="category_id" required>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Payment Method *</label>
+          <select id="editMethod" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="payment_method" required>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="UPI">UPI</option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">New Receipt Document (replaces previous)</label>
+          <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-xs" name="receipt" type="file" accept="image/*,application/pdf">
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Description</label>
+          <textarea id="editDescription" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-3 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm" name="description" rows="3" placeholder="Provide extra detail here..."></textarea>
+        </div>
+      </div>
+      <button type="submit" class="w-full bg-primary hover:bg-primary/95 text-on-secondary font-bold py-3 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all text-sm">
+        <span class="material-symbols-outlined text-[18px]" data-icon="save">save</span>
+        Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+<!-- JavaScript Actions -->
+<script>
+  function openAddModal() {
+    document.getElementById('addModal').classList.remove('hidden');
+  }
+  function closeAddModal() {
+    document.getElementById('addModal').classList.add('hidden');
+  }
+  function openEditModal(id, title, desc, amount, category_id, method, date) {
+    document.getElementById('editForm').action = '/expenses/edit/' + id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editDescription').value = desc;
+    document.getElementById('editAmount').value = amount;
+    document.getElementById('editCategory').value = category_id;
+    document.getElementById('editMethod').value = method;
+    document.getElementById('editDate').value = date;
+    document.getElementById('editModal').classList.remove('hidden');
+  }
+  function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+  }
+  
+  // Check url parameter if we want to open add expense modal automatically
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('add') === 'true') {
+      openAddModal();
+    }
+  }
+</script>
+</body></html>
