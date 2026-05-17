@@ -217,10 +217,37 @@
 </div>
 <div class="flex items-center gap-6">
 <div class="flex items-center gap-2">
-<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<div class="relative">
+<button id="notification-btn" onclick="toggleNotifications(event)" class="relative p-2 text-on-surface-variant hover:text-primary transition-transform active:scale-95">
 <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+<span id="notification-badge" class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
 </button>
+<div id="notification-dropdown" class="absolute right-0 mt-2 w-80 bg-surface-container border border-outline-variant rounded-xl shadow-2xl overflow-hidden hidden z-50 transition-all duration-150 origin-top-right transform scale-95 opacity-0">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between">
+<span class="font-semibold text-sm text-on-surface">Notifications</span>
+<button onclick="clearNotifications(event)" class="text-[11px] text-primary hover:underline">Mark all read</button>
+</div>
+<div class="max-h-64 overflow-y-auto divide-y divide-outline-variant/30">
+<div class="p-4 flex gap-3 hover:bg-surface-container-high/40 transition-colors">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="info">info</span>
+<div class="flex-1">
+<p class="text-xs text-on-surface font-semibold">Budget Limit Warning</p>
+<p class="text-[11px] text-on-surface-variant/80 mt-1">Wisdom District budget is on track with 0% utilized.</p>
+</div>
+</div>
+<div class="p-4 flex gap-3 hover:bg-surface-container-high/40 transition-colors">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="sync">sync</span>
+<div class="flex-1">
+<p class="text-xs text-on-surface font-semibold">System Synchronization</p>
+<p class="text-[11px] text-on-surface-variant/80 mt-1">All audit ledgers are synced with SQLite DB.</p>
+</div>
+</div>
+</div>
+<div class="p-2 border-t border-outline-variant text-center bg-surface-container-low">
+<a href="/reports" class="text-[11px] text-on-surface-variant hover:text-primary transition-colors block py-1 font-semibold">View detailed analytics</a>
+</div>
+</div>
+</div>
 <button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
 <span class="material-symbols-outlined" data-icon="help">help</span>
 </button>
@@ -244,14 +271,15 @@
 <p class="text-on-surface-variant text-sm mt-1">Real-time fiscal monitoring for Wisdom School District.</p>
 </div>
 <div class="flex gap-3">
-<button class="px-4 py-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary rounded-lg flex items-center gap-2 transition-all text-sm">
+<button onclick="window.print()" class="px-4 py-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary rounded-lg flex items-center gap-2 transition-all text-sm active:scale-95">
 <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
                             Export PDF
                         </button>
-<button class="px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-semibold flex items-center gap-2 hover:brightness-110 active:opacity-80 transition-all text-sm">
+<div onclick="showCalendarPicker(event)" class="relative px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-semibold flex items-center gap-2 hover:brightness-110 active:opacity-80 transition-all text-sm cursor-pointer select-none">
 <span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
-                            June 2024
-                        </button>
+                            {{ current_month_name }}
+                            <input type="month" id="month-picker" value="{{ current_month_val }}" onchange="filterMonth(this.value)" onclick="event.stopPropagation()" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full p-0 border-none outline-none focus:ring-0">
+                        </div>
 </div>
 </div>
 <!-- Bento Summary Grid -->
@@ -263,7 +291,7 @@
 <span class="text-on-surface-variant text-[10px] font-bold tracking-widest uppercase">MONTHLY EXPENDITURE</span>
 <span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
 </div>
-<div class="font-mono-data text-display-lg text-on-surface mb-2">₹{{ "{:,.2f}".format(monthly_total) }}</div>
+<div class="font-mono-data text-xl sm:text-2xl lg:text-3xl text-on-surface mb-2 font-bold">₹{{ "{:,.2f}".format(monthly_total) }}</div>
 <div class="flex items-center gap-2 {% if percent_change > 0 %}text-error{% else %}text-primary{% endif %} text-xs font-semibold">
 <span class="material-symbols-outlined text-xs" data-icon="{% if percent_change > 0 %}arrow_upward{% else %}arrow_downward{% endif %}">{% if percent_change > 0 %}arrow_upward{% else %}arrow_downward{% endif %}</span>
                                 {{ "{:+.1f}".format(percent_change) }}% from last month
@@ -280,7 +308,7 @@
 <span class="text-on-surface-variant text-[10px] font-bold tracking-widest uppercase">YEAR-TO-DATE TOTAL</span>
 <span class="material-symbols-outlined text-secondary" data-icon="analytics">analytics</span>
 </div>
-<div class="font-mono-data text-display-lg text-on-surface mb-2">₹{{ "{:,.2f}".format(yearly_total) }}</div>
+<div class="font-mono-data text-xl sm:text-2xl lg:text-3xl text-on-surface mb-2 font-bold">₹{{ "{:,.0f}".format(yearly_total) }}</div>
 <div class="flex items-center gap-2 text-primary text-xs font-semibold">
 <span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span>
                                 On track with FY26 Forecast
@@ -297,11 +325,12 @@
 <span class="text-on-surface-variant text-[10px] font-bold tracking-widest uppercase">BUDGET REMAINING</span>
 <span class="material-symbols-outlined text-tertiary" data-icon="pie_chart">pie_chart</span>
 </div>
-<div class="font-mono-data text-display-lg text-on-surface mb-2">₹{{ "{:,.2f}".format(budget_remaining) }}</div>
-
-
+<div class="font-mono-data text-xl sm:text-2xl lg:text-3xl text-on-surface mb-2 font-bold">₹{{ "{:,.0f}".format(budget_remaining) }}</div>
+<div class="flex items-center gap-2 text-primary text-xs font-semibold">
+<span class="material-symbols-outlined text-xs" data-icon="payments">payments</span>
+                                ₹{{ "{:,.0f}".format(yearly_total) }} spent ({{ "{:.1f}".format((yearly_total / 1000000.0) * 100) }}%)
+                            </div>
 </div>
-
 <div class="icon-container"><img alt="Budget Remaining Icon" class="icon-crop icon-safe" src="https://lh3.googleusercontent.com/aida/ADBb0uibCDYlamgkdRZT8EeWH7o6Rkgmpucy4Gf51MMoEn5AFjF4U58wAc34GKG-mk9Sjvkr1MsE5o9-pJ66J0q4tQaN2LCuNNQHodPyflM7SGMMe2Ypymnha8TNUyENzAuFu0R_BRDHDJlcYM5EDZ3gPkO8Pw3QlPHN1C0mceevB-SoWwG9yJIxTY8CMgBppWQ4XqYx3D1Xt3AW6qWJVGpLmpuuqBuBVwFDJOA0fhbT3rclhB8eAN1KWWhOzw"></div></div>
 </div>
 <!-- Visualization & Transactions Row -->
@@ -431,6 +460,66 @@
 <span class="absolute right-full mr-3 px-3 py-1 bg-surface-container border border-outline-variant rounded text-xs text-on-surface opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Create Entry</span>
 </a>
 </div>
+<script>
+function toggleNotifications(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('notification-dropdown');
+    if (!dropdown) return;
+    const isHidden = dropdown.classList.contains('hidden');
+    
+    if (isHidden) {
+        dropdown.classList.remove('hidden');
+        setTimeout(() => {
+            dropdown.classList.remove('scale-95', 'opacity-0');
+            dropdown.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    } else {
+        dropdown.classList.remove('scale-100', 'opacity-100');
+        dropdown.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            dropdown.classList.add('hidden');
+        }, 150);
+    }
+}
 
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('notification-dropdown');
+    const btn = document.getElementById('notification-btn');
+    if (dropdown && !dropdown.contains(event.target) && (!btn || !btn.contains(event.target))) {
+        dropdown.classList.remove('scale-100', 'opacity-100');
+        dropdown.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            dropdown.classList.add('hidden');
+        }, 150);
+    }
+});
 
+function clearNotifications(event) {
+    event.stopPropagation();
+    const badge = document.getElementById('notification-badge');
+    if (badge) {
+        badge.classList.add('hidden');
+    }
+    const items = document.querySelectorAll('#notification-dropdown .flex');
+    items.forEach(item => {
+        item.style.opacity = '0.6';
+    });
+}
+
+function showCalendarPicker(event) {
+    const picker = document.getElementById('month-picker');
+    if (picker) {
+        if (typeof picker.showPicker === 'function') {
+            picker.showPicker();
+        } else {
+            picker.click();
+        }
+    }
+}
+function filterMonth(val) {
+    if (val) {
+        window.location.href = '/dashboard/?month=' + val;
+    }
+}
+</script>
 </body></html>

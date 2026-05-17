@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required
 from app.models import Expense, Category
 from app import db
@@ -11,8 +11,25 @@ dashboard_bp = Blueprint('dashboard', __name__)
 # @login_required # Commented out until login is fully functional
 def index():
     now = datetime.utcnow()
-    current_month = now.month
-    current_year = now.year
+    
+    # Read chosen month from query param (Format: "YYYY-MM")
+    month_param = request.args.get('month', '')
+    
+    if month_param:
+        try:
+            parsed_date = datetime.strptime(month_param, '%Y-%m')
+            current_month = parsed_date.month
+            current_year = parsed_date.year
+        except ValueError:
+            current_month = now.month
+            current_year = now.year
+            month_param = f"{current_year}-{current_month:02d}"
+    else:
+        current_month = now.month
+        current_year = now.year
+        month_param = f"{current_year}-{current_month:02d}"
+        
+    current_month_name = datetime(current_year, current_month, 1).strftime('%B %Y')
     
     # 1. Monthly Total
     monthly_total = db.session.query(func.sum(Expense.amount)).filter(
@@ -55,7 +72,12 @@ def index():
     max_cat_amount = 0
     
     for cat in categories:
-        cat_sum = db.session.query(func.sum(Expense.amount)).filter_by(category_id=cat.id).scalar() or 0.0
+        cat_sum = db.session.query(func.sum(Expense.amount)).filter(
+            Expense.category_id == cat.id,
+            extract('month', Expense.expense_date) == current_month,
+            extract('year', Expense.expense_date) == current_year
+        ).scalar() or 0.0
+        
         if cat_sum > max_cat_amount:
             max_cat_amount = cat_sum
         category_data.append({
@@ -74,7 +96,10 @@ def index():
             item['percentage'] = 0
             
     # 5. Recent Transactions
-    recent_transactions = Expense.query.order_by(Expense.expense_date.desc()).limit(4).all()
+    recent_transactions = Expense.query.filter(
+        extract('month', Expense.expense_date) == current_month,
+        extract('year', Expense.expense_date) == current_year
+    ).order_by(Expense.expense_date.desc()).limit(4).all()
     
     return render_template(
         'dashboard/index.html',
@@ -83,5 +108,8 @@ def index():
         yearly_total=yearly_total,
         budget_remaining=budget_remaining,
         category_data=category_data,
-        recent_transactions=recent_transactions
+        recent_transactions=recent_transactions,
+        current_month_name=current_month_name,
+        current_month_val=month_param
     )
+
