@@ -8,7 +8,7 @@ from sqlalchemy import func, extract
 dashboard_bp = Blueprint('dashboard', __name__)
 
 @dashboard_bp.route('/')
-# @login_required # Commented out until login is fully functional
+@login_required
 def index():
     now = datetime.utcnow()
     
@@ -76,20 +76,24 @@ def index():
         categories = Category.query.all()
 
     category_data = []
-    max_cat_amount = 0
     
-    for cat in categories:
-        cat_sum = db.session.query(func.sum(Expense.amount)).filter(
-            Expense.category_id == cat.id,
-            extract('month', Expense.expense_date) == current_month,
-            extract('year', Expense.expense_date) == current_year
-        ).scalar() or 0.0
-        
-        if cat_sum > max_cat_amount:
-            max_cat_amount = cat_sum
+    # Optimized Single Query (GROUP BY) instead of loop
+    cat_sums = db.session.query(
+        Category.name,
+        func.sum(Expense.amount).label('total')
+    ).join(Expense).filter(
+        extract('month', Expense.expense_date) == current_month,
+        extract('year', Expense.expense_date) == current_year
+    ).group_by(Category.name).all()
+
+    max_cat_amount = 0
+    for cat_name, cat_sum in cat_sums:
+        amt = cat_sum or 0.0
+        if amt > max_cat_amount:
+            max_cat_amount = amt
         category_data.append({
-            'name': cat.name,
-            'amount': cat_sum
+            'name': cat_name,
+            'amount': amt
         })
         
     # Sort categories by spending descending
@@ -108,6 +112,75 @@ def index():
         extract('year', Expense.expense_date) == current_year
     ).order_by(Expense.expense_date.desc()).limit(4).all()
     
+    # 6. High Value Transactions (e.g. top 5 highest amounts this month)
+    high_value_expenses = Expense.query.filter(
+        extract('month', Expense.expense_date) == current_month,
+        extract('year', Expense.expense_date) == current_year
+    ).order_by(Expense.amount.desc()).limit(5).all()
+
+    # 7. Bottom Stats (Calculated/Mocked based on DB data)
+    cash_reserve = max(0.0, budget_limit - yearly_total) + 50000.0  # Just an example logic
+    active_audits = Expense.query.filter_by(payment_method='Bank Transfer').count()
+    discrepancies = Expense.query.filter(Expense.amount > 50000).count()
+
+    # 8. Category Allocations for Donut Chart
+    colors = ['#60A5FA', '#2DD4BF', '#c4e7ff', '#b8c4ff', '#3755c3', '#7bd0ff']
+    category_allocations = []
+    current_offset = 0
+    total_circumference = 100
+    for idx, item in enumerate(category_data):
+        percent = (item['amount'] / monthly_total * 100) if monthly_total > 0 else 0
+        dash_array = f"{percent} {total_circumference - percent}"
+        dash_offset = -current_offset
+        category_allocations.append({
+            'name': item['name'],
+            'percentage': round(percent, 1),
+            'color': colors[idx % len(colors)],
+            'dash_array': dash_array,
+            'dash_offset': dash_offset
+        })
+        current_offset += percent
+
+    # 9. Monthly Trend Chart SVG Points
+    # Fetch expenses grouped by month for the current year
+    monthly_sums = db.session.query(
+        extract('month', Expense.expense_date).label('month'),
+        func.sum(Expense.amount).label('total')
+    ).filter(
+        extract('year', Expense.expense_date) == current_year
+    ).group_by('month').order_by('month').all()
+    
+    month_totals = {int(m): float(t) for m, t in monthly_sums if m is not None}
+    
+    # Map to 12 months for chart (width: 800, height: 300)
+    svg_points = []
+    max_val = max(month_totals.values()) if month_totals else 1000
+    if max_val == 0: max_val = 1000
+    
+    path_commands = []
+    for m in range(1, 13):
+        val = month_totals.get(m, 0)
+        # x coordinates: evenly spaced across 800px
+        x = (m - 1) * (800 / 11) if m > 1 else 0
+        # y coordinates: inverted (0 is top, 300 is bottom), leaving 20px padding
+        y = 300 - ((val / max_val) * 260 + 20)
+        svg_points.append({'x': x, 'y': y, 'val': val})
+        
+        if m == 1:
+            path_commands.append(f"M {x},{y}")
+        else:
+            # Simple cubic bezier for smooth curve
+            prev_x = svg_points[-2]['x']
+            prev_y = svg_points[-2]['y']
+            cp1x = prev_x + (x - prev_x) / 2
+            cp2x = prev_x + (x - prev_x) / 2
+            path_commands.append(f"C {cp1x},{prev_y} {cp2x},{y} {x},{y}")
+            
+    svg_path_d = " ".join(path_commands)
+    
+    # Previous year dummy path (could be fetched from DB similarly)
+    prev_year_path_d = "M 0,280 Q 200,200 400,250 T 800,220"
+
     return render_template(
         'dashboard/index.html',
         monthly_total=monthly_total,
@@ -117,6 +190,14 @@ def index():
         category_data=category_data,
         recent_transactions=recent_transactions,
         current_month_name=current_month_name,
-        current_month_val=month_param
+        current_month_val=month_param,
+        high_value_expenses=high_value_expenses,
+        cash_reserve=cash_reserve,
+        active_audits=active_audits,
+        discrepancies=discrepancies,
+        category_allocations=category_allocations,
+        svg_path_d=svg_path_d,
+        svg_points=svg_points,
+        prev_year_path_d=prev_year_path_d
     )
 

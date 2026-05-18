@@ -9,7 +9,7 @@ import calendar
 reports_bp = Blueprint('reports', __name__)
 
 @reports_bp.route('/')
-# @login_required
+@login_required
 def index():
     # Parse month selection, default to May 2026
     selected_month_str = request.args.get('month', '2026-05')
@@ -63,8 +63,6 @@ def index():
 
     # 4. Recent High-Value Transactions (Ordered by amount descending)
     high_value_expenses = Expense.query.filter(
-        func.strftime('%Y-%m', Expense.expense_date) == selected_month_str
-    ).order_repr = Expense.query.filter(
         func.strftime('%Y-%m', Expense.expense_date) == selected_month_str
     ).order_by(Expense.amount.desc()).all()
 

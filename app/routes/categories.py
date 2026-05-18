@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required, current_user
 from app.models import Category
 from app import db
 
 categories_bp = Blueprint('categories', __name__)
 
 @categories_bp.route('/')
+@login_required
 def index():
     categories = Category.query.all()
     # If no categories, seed the default ones
@@ -18,6 +20,7 @@ def index():
     return render_template('categories/index.html', categories=categories)
 
 @categories_bp.route('/add', methods=['POST'])
+@login_required
 def add():
     name = request.form.get('name')
     if name:
@@ -32,6 +35,7 @@ def add():
     return redirect(url_for('categories.index'))
 
 @categories_bp.route('/delete/<int:id>', methods=['POST'])
+@login_required
 def delete(id):
     cat = Category.query.get_or_404(id)
     if cat.expenses:

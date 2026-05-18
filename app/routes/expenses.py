@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from app.models import Expense, Category, User
 from app import db
 from datetime import datetime
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 expenses_bp = Blueprint('expenses', __name__)
 
@@ -22,6 +22,7 @@ def get_default_user():
     return user
 
 @expenses_bp.route('/')
+@login_required
 def index():
     # Search and Filter parameters
     search_query = request.args.get('search', '')
@@ -56,10 +57,22 @@ def index():
     return render_template('expenses/index.html', expenses=expenses, categories=categories, search_query=search_query, selected_category=category_id, selected_payment_method=payment_method, datetime=datetime)
 
 @expenses_bp.route('/add', methods=['POST'])
+@login_required
 def add():
     title = request.form.get('title')
     description = request.form.get('description', '')
-    amount = float(request.form.get('amount', 0))
+    
+    try:
+        amount_val = request.form.get('amount')
+        if not amount_val:
+            raise ValueError
+        amount = float(amount_val)
+        if amount < 0:
+            raise ValueError
+    except ValueError:
+        flash('Invalid amount entered.', 'danger')
+        return redirect(url_for('expenses.index'))
+
     category_id = int(request.form.get('category_id'))
     payment_method = request.form.get('payment_method')
     date_str = request.form.get('expense_date')
@@ -101,11 +114,29 @@ def add():
     return redirect(url_for('expenses.index'))
 
 @expenses_bp.route('/edit/<int:id>', methods=['POST'])
+@login_required
 def edit(id):
     expense = Expense.query.get_or_404(id)
+    
+    if expense.created_by != current_user.id and current_user.role != 'Admin':
+        flash('Unauthorized access!', 'danger')
+        return redirect(url_for('expenses.index'))
+
     expense.title = request.form.get('title')
     expense.description = request.form.get('description', '')
-    expense.amount = float(request.form.get('amount', 0))
+    
+    try:
+        amount_val = request.form.get('amount')
+        if not amount_val:
+            raise ValueError
+        amount = float(amount_val)
+        if amount < 0:
+            raise ValueError
+        expense.amount = amount
+    except ValueError:
+        flash('Invalid amount entered.', 'danger')
+        return redirect(url_for('expenses.index'))
+
     expense.category_id = int(request.form.get('category_id'))
     expense.payment_method = request.form.get('payment_method')
     
@@ -132,8 +163,13 @@ def edit(id):
     return redirect(url_for('expenses.index'))
 
 @expenses_bp.route('/delete/<int:id>', methods=['POST'])
+@login_required
 def delete(id):
     expense = Expense.query.get_or_404(id)
+    
+    if expense.created_by != current_user.id and current_user.role != 'Admin':
+        flash('Unauthorized access!', 'danger')
+        return redirect(url_for('expenses.index'))
     
     # Try deleting the receipt file if it exists
     if expense.receipt_path:
