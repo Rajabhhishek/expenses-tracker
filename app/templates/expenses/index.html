@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     "colors": {
-                        "primary": "#b8c4ff",
+                        "primary": "#60A5FA",
                         "surface-dim": "#0b1326",
                         "surface": "#0b1326",
                         "surface-container": "#171f33",
@@ -31,8 +31,8 @@
                         "on-primary-fixed-variant": "#173bab",
                         "surface-container-low": "#131b2e",
                         "tertiary": "#b9c8de",
-                        "secondary": "#7bd0ff",
-                        "primary-container": "#1e40af",
+                        "secondary": "#2DD4BF",
+                        "primary-container": "#2563EB",
                         "on-secondary-fixed": "#001e2c",
                         "secondary-fixed": "#c4e7ff",
                         "secondary-container": "#00a6e0",
@@ -55,7 +55,7 @@
                         "on-secondary-fixed-variant": "#004c69",
                         "on-secondary-container": "#00374d",
                         "primary-fixed": "#dde1ff",
-                        "on-primary": "#002584",
+                        "on-primary": "#ffffff",
                         "surface-container-high": "#222a3d",
                         "error": "#ffb4ab"
                     },
@@ -123,9 +123,65 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-    </style>
+    
+        /* Animated Mesh Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #040914;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            z-index: -2;
+            animation: mesh-pulse 15s ease-in-out infinite alternate;
+        }
+        @keyframes mesh-pulse {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        /* Premium Glassmorphism */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.65) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+        .bento-card {
+            background: rgba(17, 24, 39, 0.65) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .bento-card:hover {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.15) !important;
+        }
+        
+        /* Sidebar styling */
+        aside {
+            background: rgba(11, 15, 25, 0.85) !important;
+            backdrop-filter: blur(20px) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        /* Header styling */
+        header {
+            background: rgba(11, 15, 25, 0.8) !important;
+            backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+
+</style>
 </head>
 <body class="font-body-md text-body-md overflow-x-hidden">
+<div class="mesh-bg"></div>
 <!-- SideNavBar -->
 <aside class="fixed left-0 top-0 h-full w-[280px] bg-surface border-r border-outline-variant flex flex-col py-md z-50">
 <div class="px-lg mb-xl flex flex-col items-center text-center">
@@ -158,7 +214,7 @@
 <span class="material-symbols-outlined" data-icon="add">add</span>
 <span class="">New Expense</span>
 </button>
-<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="#">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/auth/settings">
 <span class="material-symbols-outlined" data-icon="settings">settings</span>
 <span class="">Settings</span>
 </a>

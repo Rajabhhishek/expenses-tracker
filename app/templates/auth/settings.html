@@ -96,9 +96,65 @@
       z-index: -1;
       pointer-events: none;
     }
-  </style>
+  
+        /* Animated Mesh Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #040914;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            z-index: -2;
+            animation: mesh-pulse 15s ease-in-out infinite alternate;
+        }
+        @keyframes mesh-pulse {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        /* Premium Glassmorphism */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.65) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+        .bento-card {
+            background: rgba(17, 24, 39, 0.65) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .bento-card:hover {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.15) !important;
+        }
+        
+        /* Sidebar styling */
+        aside {
+            background: rgba(11, 15, 25, 0.85) !important;
+            backdrop-filter: blur(20px) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        /* Header styling */
+        header {
+            background: rgba(11, 15, 25, 0.8) !important;
+            backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+
+</style>
 </head>
 <body class="font-body-md min-h-screen relative overflow-x-hidden">
+<div class="mesh-bg"></div>
   <div class="bg-glow"></div>
   
   <div class="max-w-4xl mx-auto px-6 py-12">
@@ -148,6 +204,10 @@
           <button type="button" onclick="switchTab('budget')" id="btn-budget" class="tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1">
             <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
             Budget Preferences
+          </button>
+          <button type="button" disabled class="w-full text-left px-4 py-3 rounded-xl text-on-surface-variant/50 font-medium flex items-center gap-3 mt-1 cursor-not-allowed">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            Notification Preferences
           </button>
         </div>
       </div>
@@ -268,27 +328,39 @@
 
   <script>
     function switchTab(tabId) {
-      // Hide all cards
-      document.querySelectorAll('.tab-card').forEach(card => {
-        card.classList.add('hidden');
-        card.style.display = 'none';
-      });
-      // Reset all buttons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('bg-primary/10', 'text-primary', 'font-semibold');
-        btn.classList.add('text-on-surface', 'font-medium');
-      });
+      // Hide all cards safely
+      const cards = document.querySelectorAll('.tab-card');
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.add('hidden');
+        cards[i].style.display = 'none';
+      }
+      
+      // Reset all buttons safely
+      const btns = document.querySelectorAll('.tab-btn');
+      for (let i = 0; i < btns.length; i++) {
+        btns[i].className = 'tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1';
+      }
 
       // Show selected card
       const selected = document.getElementById('card-' + tabId);
-      selected.classList.remove('hidden');
-      selected.style.display = 'block';
+      if (selected) {
+        selected.classList.remove('hidden');
+        selected.style.display = 'block';
+      }
       
       // Highlight selected button
       const activeBtn = document.getElementById('btn-' + tabId);
-      activeBtn.classList.remove('text-on-surface', 'font-medium');
-      activeBtn.classList.add('bg-primary/10', 'text-primary', 'font-semibold');
+      if (activeBtn) {
+        activeBtn.className = 'tab-btn w-full text-left px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold flex items-center gap-3 transition-colors mt-1';
+      }
     }
+
+    // Ensure the state matches initially on load
+    document.addEventListener('DOMContentLoaded', function() {
+      // If there's an error message for password, we might want to stay on the security tab,
+      // but for now default to profile
+      switchTab('profile');
+    });
   </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <circle cx="250" cy="250" r="240" fill="#ffffff" filter="drop-shadow(0px 10px 15px rgba(0,0,0,0.2))"/>
   <!-- Top Arched Text -->
   <path id="textPathTop" d="M 100,220 A 150,150 0 0,1 400,220" fill="transparent" />
   <text font-family="Arial, sans-serif" font-weight="bold" font-size="34" fill="#00558C" letter-spacing="2">
