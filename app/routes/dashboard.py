@@ -54,8 +54,15 @@ def index():
         extract('year', Expense.expense_date) == current_year
     ).scalar() or 0.0
     
-    # 3. Budget Remaining (Assume fixed budget of ₹1,000,000 for the year)
-    budget_limit = 1000000.0
+    # 3. Budget Remaining
+    from flask_login import current_user
+    from app.models import User
+    if current_user.is_authenticated:
+        budget_limit = current_user.yearly_budget
+    else:
+        admin_user = User.query.filter_by(username='admin').first()
+        budget_limit = admin_user.yearly_budget if admin_user else 1000000.0
+
     budget_remaining = max(0.0, budget_limit - yearly_total)
     
     # 4. Category Breakdown

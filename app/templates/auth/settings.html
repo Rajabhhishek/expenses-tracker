@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings | Wisdom Finance</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#b8c4ff",
+            "surface-dim": "#0b1326",
+            "surface": "#0b1326",
+            "surface-container": "#171f33",
+            "on-surface-variant": "#c4c5d5",
+            "inverse-primary": "#3755c3",
+            "on-background": "#dae2fd",
+            "on-tertiary-fixed-variant": "#39485a",
+            "on-secondary": "#00354a",
+            "tertiary-container": "#3e4c5e",
+            "outline-variant": "#444653",
+            "surface-container-lowest": "#060e20",
+            "on-tertiary-container": "#adbcd2",
+            "inverse-on-surface": "#283044",
+            "secondary-fixed-dim": "#7bd0ff",
+            "on-error": "#690005",
+            "inverse-surface": "#dae2fd",
+            "on-primary-fixed-variant": "#173bab",
+            "surface-container-low": "#131b2e",
+            "tertiary": "#b9c8de",
+            "secondary": "#7bd0ff",
+            "primary-container": "#1e40af",
+            "on-secondary-fixed": "#001e2c",
+            "secondary-fixed": "#c4e7ff",
+            "secondary-container": "#00a6e0",
+            "on-tertiary": "#233143",
+            "on-error-container": "#ffdad6",
+            "surface-container-highest": "#2d3449",
+            "error-container": "#93000a",
+            "on-primary-fixed": "#001453",
+            "on-tertiary-fixed": "#0d1c2d",
+            "surface-variant": "#2d3449",
+            "outline": "#8e909f",
+            "surface-tint": "#b8c4ff",
+            "primary-fixed": "#dde1ff",
+            "on-primary": "#002584",
+            "surface-container-high": "#222a3d",
+            "error": "#ffb4ab",
+            background: "#0b1326",
+            "on-primary-container": "#a8b8ff",
+            "on-surface": "#dae2fd",
+            "tertiary-fixed-dim": "#b9c8de",
+            "surface-bright": "#31394d",
+            "on-secondary-fixed-variant": "#004c69",
+            "on-secondary-container": "#00374d",
+            "primary-fixed": "#dde1ff",
+            "on-primary": "#002584",
+            "surface-container-high": "#222a3d",
+            "error": "#ffb4ab",
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            "2xl": "1rem",
+            full: "9999px",
+          },
+          fontFamily: {
+            "body-md": ["Inter"],
+            "mono-data": ["JetBrains Mono"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+    body { background-color: #0b1326; color: #dae2fd; }
+    .glass-card { background: rgba(23,31,51,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); }
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+    .btn-primary:hover { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); transform: translateY(-1px); }
+    
+    /* Animated subtle background glow */
+    .bg-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vw;
+      height: 80vh;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(11, 19, 38, 0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="font-body-md min-h-screen relative overflow-x-hidden">
+  <div class="bg-glow"></div>
+  
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-4xl">manage_accounts</span>
+          Account Preferences
+        </h1>
+        <p class="text-on-surface-variant mt-2 text-sm">Manage your profile, security settings, and personal preferences.</p>
+      </div>
+      <a href="{{ url_for('dashboard.index') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant transition-colors text-sm font-medium">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Return to Dashboard
+      </a>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-8 space-y-3">
+          {% for category, message in messages %}
+            <div class="flex items-center gap-3 p-4 rounded-xl text-sm font-medium {% if category == 'success' %}bg-green-500/10 border border-green-500/30 text-green-400{% else %}bg-red-500/10 border border-red-500/30 text-red-400{% endif %} shadow-lg">
+              <span class="material-symbols-outlined">{% if category == 'success' %}check_circle{% else %}error{% endif %}</span>
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      
+      <!-- Sidebar / Quick links -->
+      <div class="md:col-span-4 space-y-2">
+        <div class="glass-card rounded-2xl p-4 sticky top-6">
+          <div class="text-xs font-bold text-on-surface-variant tracking-widest uppercase mb-4 px-2">Settings Menu</div>
+          <button type="button" onclick="switchTab('profile')" id="btn-profile" class="tab-btn w-full text-left px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold flex items-center gap-3 transition-colors">
+            <span class="material-symbols-outlined text-[20px]">person</span>
+            Profile Information
+          </button>
+          <button type="button" onclick="switchTab('security')" id="btn-security" class="tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1">
+            <span class="material-symbols-outlined text-[20px]">shield</span>
+            Security & Authentication
+          </button>
+          <button type="button" onclick="switchTab('budget')" id="btn-budget" class="tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1">
+            <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+            Budget Preferences
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="md:col-span-8 relative">
+        
+        <!-- Profile Settings Card -->
+        <div id="card-profile" class="tab-card glass-card rounded-2xl overflow-hidden shadow-2xl" style="display: block;">
+          <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+            <span class="material-symbols-outlined text-secondary">id_card</span>
+            <h2 class="text-xl font-bold text-white">Profile Information</h2>
+          </div>
+          <div class="p-8">
+            <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
+              <input type="hidden" name="action" value="update_username">
+              <div>
+                <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="new_username">Account Username</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">person</span>
+                  <input type="text" name="new_username" id="new_username" value="{{ current_user.username }}" required 
+                         class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                </div>
+                <p class="text-xs text-on-surface-variant mt-2">Your username is used to log in and identify your actions in the audit logs.</p>
+              </div>
+              
+              <div class="flex justify-end pt-2">
+                <button type="submit" class="btn-primary text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">save</span>
+                  Save Profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Security Card -->
+        <div id="card-security" class="tab-card hidden glass-card rounded-2xl overflow-hidden shadow-2xl" style="display: none;">
+          <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+            <span class="material-symbols-outlined text-magenta-400" style="color: #d946ef;">lock_reset</span>
+            <h2 class="text-xl font-bold text-white">Security & Password</h2>
+          </div>
+          <div class="p-8">
+            <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
+              <input type="hidden" name="action" value="update_password">
+              
+              <div>
+                <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="current_password">Current Password</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">key</span>
+                  <input type="password" name="current_password" id="current_password" required 
+                         class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="new_password">New Password</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">lock</span>
+                    <input type="password" name="new_password" id="new_password" required minlength="6"
+                           class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="confirm_password">Confirm Password</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">lock_clock</span>
+                    <input type="password" name="confirm_password" id="confirm_password" required minlength="6"
+                           class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex justify-end pt-2">
+                <button type="submit" class="bg-surface-container-highest hover:bg-surface-bright border border-outline-variant text-white px-6 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">update</span>
+                  Update Password
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Budget Preferences Card -->
+        <div id="card-budget" class="tab-card hidden glass-card rounded-2xl overflow-hidden shadow-2xl" style="display: none;">
+          <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+            <span class="material-symbols-outlined text-green-400">account_balance_wallet</span>
+            <h2 class="text-xl font-bold text-white">Budget Preferences</h2>
+          </div>
+          <div class="p-8">
+            <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
+              <input type="hidden" name="action" value="update_budget">
+              
+              <div>
+                <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="new_budget">Yearly Budget (₹)</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">payments</span>
+                  <input type="number" step="0.01" min="0" name="new_budget" id="new_budget" value="{{ current_user.yearly_budget }}" required 
+                         class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all shadow-inner" />
+                </div>
+                <p class="text-xs text-on-surface-variant mt-2">Set your total budget limit for the year. This updates the progress and warnings on your dashboard.</p>
+              </div>
+              
+              <div class="flex justify-end pt-2">
+                <button type="submit" class="bg-surface-container-highest hover:bg-surface-bright border border-outline-variant text-white px-6 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">save</span>
+                  Save Budget
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      // Hide all cards
+      document.querySelectorAll('.tab-card').forEach(card => {
+        card.classList.add('hidden');
+        card.style.display = 'none';
+      });
+      // Reset all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-primary/10', 'text-primary', 'font-semibold');
+        btn.classList.add('text-on-surface', 'font-medium');
+      });
+
+      // Show selected card
+      const selected = document.getElementById('card-' + tabId);
+      selected.classList.remove('hidden');
+      selected.style.display = 'block';
+      
+      // Highlight selected button
+      const activeBtn = document.getElementById('btn-' + tabId);
+      activeBtn.classList.remove('text-on-surface', 'font-medium');
+      activeBtn.classList.add('bg-primary/10', 'text-primary', 'font-semibold');
+    }
+  </script>
+</body>
+</html>
