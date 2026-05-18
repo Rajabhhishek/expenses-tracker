@@ -172,6 +172,17 @@
             box-shadow: 0 4px 20px rgba(217, 70, 239, 0.5);
             transform: translateY(-1px);
         }
+
+        .logo-3d {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0px 15px 20px rgba(0,0,0,0.6)) drop-shadow(0px 5px 10px rgba(0,0,0,0.4));
+            transform: perspective(600px) rotateX(15deg) rotateY(-10deg) scale(1.1);
+        }
+        
+        .logo-3d:hover {
+            transform: perspective(600px) rotateX(0deg) rotateY(0deg) scale(1.2);
+            filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.8)) drop-shadow(0px 8px 15px rgba(0,0,0,0.6));
+        }
     </style>
 </head>
 <body class="text-on-surface font-body-md min-h-screen flex items-center justify-center p-gutter relative overflow-hidden bg-surface-container-lowest">
@@ -186,8 +197,8 @@
 <main class="w-full max-w-[440px] flex flex-col gap-xl relative z-10 p-8 rounded-2xl bg-transparent">
 <!-- Branding Section -->
 <div class="flex flex-col items-center gap-md text-center">
-<div class="w-24 h-24 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center overflow-hidden shadow-2xl">
-<img alt="Wisdom School Logo" class="w-20 h-20 object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uh7p7fTw35JPLB7YXBJuq244aLEupCvob0C5hjY1w5czAZl0GIhYOXiHhxeRKwA4smc2G7KMU_1JG7zJO_v1O-Xcy5iwJgPdL5btOMY1kjRUb1vRzjxQ4Z8yyTEefAMF2TTNoUM_6JNSzA84HqoU5uRywyHYHfuHD1u53k70I2jHW-obCRixX_H58TcRkoyL8NNXXiL-t0KiabVxpyGdiNg58afcjM8V4Gagz2eUsV9-2HGLUuFCtTQiQg"/>
+<div class="w-32 h-32 flex items-center justify-center mb-2">
+<img alt="Wisdom School Logo" class="w-full h-full object-contain logo-3d" src="{{ url_for('static', filename='logo.svg') }}"/>
 </div>
 <div class="flex flex-col gap-xs">
 <h1 class="font-headline-lg text-headline-lg text-white drop-shadow-md">Wisdom Finance</h1>

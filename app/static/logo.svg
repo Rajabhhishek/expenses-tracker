@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <!-- Top Arched Text -->
+  <path id="textPathTop" d="M 100,220 A 150,150 0 0,1 400,220" fill="transparent" />
+  <text font-family="Arial, sans-serif" font-weight="bold" font-size="34" fill="#00558C" letter-spacing="2">
+    <textPath href="#textPathTop" startOffset="50%" text-anchor="middle">
+      The Global World School
+    </textPath>
+  </text>
+
+  <!-- Center Abstract Figures -->
+  <g transform="translate(0, -20)">
+    <!-- Blue Figure (Left) -->
+    <circle cx="210" cy="220" r="15" fill="#0080C6" />
+    <path d="M 170,270 Q 210,290 250,340 Q 210,250 225,235 Q 200,250 170,270 Z" fill="#0080C6" />
+    <path d="M 160,265 Q 180,270 200,285 L 170,295 Z" fill="#0080C6" />
+
+    <!-- Yellow Figure (Right) -->
+    <circle cx="290" cy="220" r="15" fill="#F2A900" />
+    <path d="M 330,270 Q 290,290 250,340 Q 290,250 275,235 Q 300,250 330,270 Z" fill="#F2A900" />
+    <path d="M 340,265 Q 320,270 300,285 L 330,295 Z" fill="#F2A900" />
+
+    <!-- Red Figure (Center) -->
+    <circle cx="250" cy="245" r="10" fill="#D31200" />
+    <path d="M 225,260 Q 250,300 250,340 Q 250,300 275,260 Q 260,275 250,290 Q 240,275 225,260 Z" fill="#D31200" />
+  </g>
+
+  <!-- Open Book -->
+  <g transform="translate(0, -30)">
+    <path d="M 150,360 Q 200,380 250,400 Q 300,380 350,360 L 360,370 Q 300,410 250,420 Q 200,410 140,370 Z" fill="#004B79" />
+    <path d="M 150,360 Q 200,380 250,400 L 250,340 Q 200,310 140,320 Z" fill="#004B79" />
+    <path d="M 350,360 Q 300,380 250,400 L 250,340 Q 300,310 360,320 Z" fill="#004B79" />
+  </g>
+
+  <!-- Bottom Text -->
+  <text x="250" y="440" font-family="Impact, Arial, sans-serif" font-size="55" font-weight="bold" fill="#004B79" text-anchor="middle" letter-spacing="3">WISDOM</text>
+  <text x="250" y="465" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#D31200" text-anchor="middle" letter-spacing="2">ASPIRING FOR EXCELLENCE</text>
+</svg>

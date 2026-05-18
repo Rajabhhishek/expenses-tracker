@@ -163,13 +163,27 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #444653;
         }
+
+        .logo-3d {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.5)) drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+            transform: perspective(500px) rotateX(10deg) rotateY(-5deg) scale(1.05);
+        }
+        
+        .logo-3d:hover {
+            transform: perspective(500px) rotateX(0deg) rotateY(0deg) scale(1.1);
+            filter: drop-shadow(0px 15px 20px rgba(0,0,0,0.7)) drop-shadow(0px 6px 10px rgba(0,0,0,0.5));
+        }
     </style>
 <style data-stitch-cursor=""></style><style data-stitch-scroll-lock=""></style></head>
 <body class="font-body-md text-body-md flex min-h-screen">
 <div class="fixed inset-0 data-grid-pattern pointer-events-none"></div>
 <!-- SideNavBar -->
 <aside class="fixed left-0 top-0 h-full w-[240px] bg-surface border-r border-outline-variant flex flex-col z-50">
-<div class="px-6 py-8">
+<div class="px-6 py-6 flex flex-col items-center text-center">
+<div class="w-20 h-20 mb-3 flex items-center justify-center">
+    <img alt="Wisdom School Logo" class="w-full h-full object-contain logo-3d" src="{{ url_for('static', filename='logo.svg') }}"/>
+</div>
 <h1 class="text-xl font-bold text-primary tracking-tight">Wisdom Finance</h1>
 <p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-1">Institutional Audit</p>
 </div>
