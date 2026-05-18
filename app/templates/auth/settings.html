@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Account Settings | Wisdom Finance</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            primary: "#b8c4ff",
+            primary: "#60A5FA",
             "surface-dim": "#0b1326",
             "surface": "#0b1326",
             "surface-container": "#171f33",
@@ -32,8 +33,8 @@
             "on-primary-fixed-variant": "#173bab",
             "surface-container-low": "#131b2e",
             "tertiary": "#b9c8de",
-            "secondary": "#7bd0ff",
-            "primary-container": "#1e40af",
+            "secondary": "#2DD4BF",
+            "primary-container": "#2563EB",
             "on-secondary-fixed": "#001e2c",
             "secondary-fixed": "#c4e7ff",
             "secondary-container": "#00a6e0",
@@ -46,10 +47,8 @@
             "surface-variant": "#2d3449",
             "outline": "#8e909f",
             "surface-tint": "#b8c4ff",
-            "primary-fixed": "#dde1ff",
-            "on-primary": "#002584",
-            "surface-container-high": "#222a3d",
-            "error": "#ffb4ab",
+            "primary-fixed-dim": "#b8c4ff",
+            "tertiary-fixed": "#d4e4fa",
             background: "#0b1326",
             "on-primary-container": "#a8b8ff",
             "on-surface": "#dae2fd",
@@ -58,16 +57,9 @@
             "on-secondary-fixed-variant": "#004c69",
             "on-secondary-container": "#00374d",
             "primary-fixed": "#dde1ff",
-            "on-primary": "#002584",
+            "on-primary": "#ffffff",
             "surface-container-high": "#222a3d",
-            "error": "#ffb4ab",
-          },
-          borderRadius: {
-            DEFAULT: "0.25rem",
-            lg: "0.5rem",
-            xl: "0.75rem",
-            "2xl": "1rem",
-            full: "9999px",
+            error: "#ffb4ab",
           },
           fontFamily: {
             "body-md": ["Inter"],
@@ -79,288 +71,256 @@
   </script>
   <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
-    body { background-color: #0b1326; color: #dae2fd; }
-    .glass-card { background: rgba(23,31,51,0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); }
-    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
-    .btn-primary:hover { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); transform: translateY(-1px); }
-    
-    /* Animated subtle background glow */
-    .bg-glow {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vw;
-      height: 80vh;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(11, 19, 38, 0) 70%);
-      z-index: -1;
-      pointer-events: none;
-    }
-  
-        /* Animated Mesh Background */
-        .mesh-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #040914;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-            z-index: -2;
-            animation: mesh-pulse 15s ease-in-out infinite alternate;
-        }
-        @keyframes mesh-pulse {
-            0% { opacity: 0.7; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.05); }
-        }
-        
-        /* Premium Glassmorphism */
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.65) !important;
-            backdrop-filter: blur(16px) saturate(120%) !important;
-            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
-        }
-        .bento-card {
-            background: rgba(17, 24, 39, 0.65) !important;
-            backdrop-filter: blur(16px) saturate(120%) !important;
-            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        }
-        .bento-card:hover {
-            border-color: rgba(255, 255, 255, 0.2) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.15) !important;
-        }
-        
-        /* Sidebar styling */
-        aside {
-            background: rgba(11, 15, 25, 0.85) !important;
-            backdrop-filter: blur(20px) !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
-        }
-        
-        /* Header styling */
-        header {
-            background: rgba(11, 15, 25, 0.8) !important;
-            backdrop-filter: blur(20px) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-        }
-
-</style>
+    body { background-color: #0b1326; color: #dae2fd; overflow-x: hidden; }
+    .data-grid-pattern { background-image: radial-gradient(circle, #444653 1px, transparent 1px); background-size: 24px 24px; opacity: 0.05; }
+    .mesh-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #040914; background-image: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%); z-index: -2; animation: mesh-pulse 15s ease-in-out infinite alternate; }
+    @keyframes mesh-pulse { 0% { opacity: 0.7; transform: scale(1); } 100% { opacity: 1; transform: scale(1.05); } }
+    .bento-card { border: 1px solid #2d3449; background: #171f33; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .bento-card:hover { border-color: #b8c4ff; background: #1e293b; }
+    aside { background: rgba(11, 15, 25, 0.85) !important; backdrop-filter: blur(20px) !important; border-right: 1px solid rgba(255, 255, 255, 0.05) !important; }
+    header { background: rgba(11, 15, 25, 0.8) !important; backdrop-filter: blur(20px) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
+    .settings-tab-active { background-color: rgba(37, 99, 235, 0.1); color: #60A5FA; border-left: 3px solid #60A5FA; font-weight: 600; }
+    .settings-tab-inactive { color: #c4c5d5; font-weight: 500; border-left: 3px solid transparent; }
+    .settings-tab-inactive:hover { background-color: #222a3d; color: #dae2fd; }
+  </style>
 </head>
-<body class="font-body-md min-h-screen relative overflow-x-hidden">
-<div class="mesh-bg"></div>
-  <div class="bg-glow"></div>
-  
-  <div class="max-w-4xl mx-auto px-6 py-12">
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary text-4xl">manage_accounts</span>
-          Account Preferences
-        </h1>
-        <p class="text-on-surface-variant mt-2 text-sm">Manage your profile, security settings, and personal preferences.</p>
+<body class="font-body-md text-body-md flex min-h-screen">
+  <div class="mesh-bg"></div>
+  <div class="fixed inset-0 data-grid-pattern pointer-events-none"></div>
+
+  <!-- SideNavBar -->
+  <aside class="fixed left-0 top-0 h-full w-[240px] bg-surface border-r border-outline-variant flex flex-col z-50">
+    <div class="px-6 py-6 flex flex-col items-center text-center">
+      <div class="w-20 h-20 mb-3 flex items-center justify-center">
+          <img alt="Wisdom School Logo" class="w-full h-full object-contain logo-3d" src="{{ url_for('static', filename='logo.svg') }}"/>
       </div>
-      <a href="{{ url_for('dashboard.index') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant transition-colors text-sm font-medium">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-        Return to Dashboard
+      <h1 class="text-xl font-bold text-primary tracking-tight">Wisdom Finance</h1>
+      <p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-1">Institutional Audit</p>
+    </div>
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/dashboard">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+        <span class="text-sm">Dashboard</span>
       </a>
+      <a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/expenses">
+        <span class="material-symbols-outlined text-[20px]">payments</span>
+        <span class="text-sm">Expenses</span>
+      </a>
+      <a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/categories">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        <span class="text-sm">Categories</span>
+      </a>
+      <a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" href="/reports">
+        <span class="material-symbols-outlined text-[20px]">assessment</span>
+        <span class="text-sm">Reports</span>
+      </a>
+    </nav>
+    <div class="px-4 py-6 border-t border-outline-variant space-y-4">
+      <a href="/expenses?add=true" class="w-full py-2.5 bg-primary/10 border border-primary/30 text-primary rounded-lg text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary/20 transition-all active:scale-95">
+        <span class="material-symbols-outlined text-[18px]">add</span> New Expense
+      </a>
+      <div class="space-y-1">
+        <a class="flex items-center gap-3 px-4 py-2 bg-primary-container/10 text-primary font-semibold text-sm border-l-4 border-primary" href="/auth/settings">
+          <span class="material-symbols-outlined text-[20px]">settings</span>
+          <span class="">Settings</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface text-sm border-l-4 border-transparent" href="/auth/logout">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          <span class="">Logout</span>
+        </a>
+      </div>
     </div>
+  </aside>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="mb-8 space-y-3">
-          {% for category, message in messages %}
-            <div class="flex items-center gap-3 p-4 rounded-xl text-sm font-medium {% if category == 'success' %}bg-green-500/10 border border-green-500/30 text-green-400{% else %}bg-red-500/10 border border-red-500/30 text-red-400{% endif %} shadow-lg">
-              <span class="material-symbols-outlined">{% if category == 'success' %}check_circle{% else %}error{% endif %}</span>
-              {{ message }}
+  <!-- Main Wrapper -->
+  <div class="flex-1 ml-[240px] flex flex-col min-h-screen">
+    <!-- TopNavBar -->
+    <header class="sticky top-0 z-40 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center h-16 px-8">
+      <div class="flex items-center gap-4 bg-surface-container/50 px-4 py-2 rounded-lg border border-outline-variant w-[400px]">
+        <span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+        <input class="bg-transparent border-none focus:ring-0 text-on-surface w-full placeholder:text-on-surface-variant text-sm" placeholder="Search settings..." type="text">
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3 pl-6 border-l border-outline-variant">
+          <div class="text-right hidden sm:block">
+            <p class="text-on-surface font-bold text-xs">Admin Portal</p>
+            <p class="text-on-surface-variant text-[10px] uppercase tracking-widest">Head Auditor</p>
+          </div>
+          <img alt="Administrator Profile" class="w-9 h-9 rounded-full border border-primary/20 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0f5DUF-yQsx6k4dvUkAQVEwZ0ucJh1i5LXq4vLlL778PwAXLixVjkEsPGubddeq_VuwtK0xCwFG23Vrs0OG7W9vKVNGno0HuOLwvTTWS8zm3ZnBRgmTZMUcxQB4aqCSBhoFNnI8Zv-wf0UDkY7Ew1KyeitfV3FKUxVTgYeXmaEe8GBlxeNtSliyavHHW-05ZkWU3rcaY1emH5UvEUwngpLHxX7b9j8TDuG0_beTHy3oF0EO_AVrGua27iDz2uvTsqVOaatxdluPo">
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-8 flex-1 overflow-y-auto">
+      <div class="max-w-[1000px] mx-auto">
+        <!-- Header Section -->
+        <div class="flex justify-between items-end mb-8">
+          <div>
+            <h2 class="font-headline-lg text-3xl font-bold text-on-surface">Settings & Preferences</h2>
+            <p class="text-on-surface-variant text-sm mt-1">Configure your institutional audit workspace and security protocols.</p>
+          </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="mb-8 space-y-2">
+              {% for category, message in messages %}
+                <div class="flex items-center gap-3 p-4 rounded-lg text-sm font-medium border {% if category == 'success' %}bg-primary/10 border-primary text-primary{% else %}bg-error/10 border-error text-error{% endif %}">
+                  <span class="material-symbols-outlined text-[18px]">{% if category == 'success' %}check_circle{% else %}error{% endif %}</span>
+                  {{ message }}
+                </div>
+              {% endfor %}
             </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+          {% endif %}
+        {% endwith %}
 
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-      
-      <!-- Sidebar / Quick links -->
-      <div class="md:col-span-4 space-y-2">
-        <div class="glass-card rounded-2xl p-4 sticky top-6">
-          <div class="text-xs font-bold text-on-surface-variant tracking-widest uppercase mb-4 px-2">Settings Menu</div>
-          <button type="button" onclick="switchTab('profile')" id="btn-profile" class="tab-btn w-full text-left px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold flex items-center gap-3 transition-colors">
-            <span class="material-symbols-outlined text-[20px]">person</span>
-            Profile Information
-          </button>
-          <button type="button" onclick="switchTab('security')" id="btn-security" class="tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1">
-            <span class="material-symbols-outlined text-[20px]">shield</span>
-            Security & Authentication
-          </button>
-          <button type="button" onclick="switchTab('budget')" id="btn-budget" class="tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1">
-            <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
-            Budget Preferences
-          </button>
-          <button type="button" disabled class="w-full text-left px-4 py-3 rounded-xl text-on-surface-variant/50 font-medium flex items-center gap-3 mt-1 cursor-not-allowed">
-            <span class="material-symbols-outlined text-[20px]">notifications</span>
-            Notification Preferences
-          </button>
-        </div>
-      </div>
-
-      <!-- Main Content Area -->
-      <div class="md:col-span-8 relative">
-        
-        <!-- Profile Settings Card -->
-        <div id="card-profile" class="tab-card glass-card rounded-2xl overflow-hidden shadow-2xl" style="display: block;">
-          <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
-            <span class="material-symbols-outlined text-secondary">id_card</span>
-            <h2 class="text-xl font-bold text-white">Profile Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+          <!-- Settings Navigation -->
+          <div class="md:col-span-3">
+            <div class="sticky top-24 space-y-1">
+              <h3 class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase mb-4 px-4">Preferences</h3>
+              <button type="button" onclick="switchTab('profile')" id="btn-profile" class="tab-btn w-full text-left px-4 py-2.5 rounded-r-full text-sm transition-all settings-tab-active flex items-center gap-3">
+                <span class="material-symbols-outlined text-[18px]">person</span>
+                Profile Info
+              </button>
+              <button type="button" onclick="switchTab('security')" id="btn-security" class="tab-btn w-full text-left px-4 py-2.5 rounded-r-full text-sm transition-all settings-tab-inactive flex items-center gap-3">
+                <span class="material-symbols-outlined text-[18px]">security</span>
+                Security
+              </button>
+              <button type="button" onclick="switchTab('budget')" id="btn-budget" class="tab-btn w-full text-left px-4 py-2.5 rounded-r-full text-sm transition-all settings-tab-inactive flex items-center gap-3">
+                <span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+                Budget Limits
+              </button>
+              <h3 class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase mb-4 mt-6 px-4">System</h3>
+              <button type="button" disabled class="w-full text-left px-4 py-2.5 text-sm transition-all text-on-surface-variant/50 border-left border-transparent flex items-center gap-3 cursor-not-allowed">
+                <span class="material-symbols-outlined text-[18px]">notifications</span>
+                Notifications
+              </button>
+              <button type="button" disabled class="w-full text-left px-4 py-2.5 text-sm transition-all text-on-surface-variant/50 border-left border-transparent flex items-center gap-3 cursor-not-allowed">
+                <span class="material-symbols-outlined text-[18px]">api</span>
+                API Keys
+              </button>
+            </div>
           </div>
-          <div class="p-8">
-            <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
-              <input type="hidden" name="action" value="update_username">
-              <div>
-                <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="new_username">Account Username</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">person</span>
+
+          <!-- Settings Panels -->
+          <div class="md:col-span-9">
+            
+            <!-- Profile Info Panel -->
+            <div id="card-profile" class="tab-card bento-card rounded-xl p-8" style="display: block;">
+              <div class="mb-6 border-b border-outline-variant pb-4">
+                <h3 class="text-xl font-semibold text-on-surface">Profile Information</h3>
+                <p class="text-sm text-on-surface-variant mt-1">Your username identifies you within the audit logs and reports.</p>
+              </div>
+              <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
+                <input type="hidden" name="action" value="update_username">
+                <div class="max-w-md">
+                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide mb-2" for="new_username">Administrator Username</label>
                   <input type="text" name="new_username" id="new_username" value="{{ current_user.username }}" required 
-                         class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                         class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-4 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm" />
                 </div>
-                <p class="text-xs text-on-surface-variant mt-2">Your username is used to log in and identify your actions in the audit logs.</p>
-              </div>
-              
-              <div class="flex justify-end pt-2">
-                <button type="submit" class="btn-primary text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[18px]">save</span>
-                  Save Profile
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+                <div class="pt-4 flex items-center gap-4">
+                  <button type="submit" class="bg-primary text-on-primary hover:bg-primary/90 px-5 py-2 rounded-lg font-semibold transition-all text-sm flex items-center gap-2 active:scale-95">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
 
-        <!-- Security Card -->
-        <div id="card-security" class="tab-card hidden glass-card rounded-2xl overflow-hidden shadow-2xl" style="display: none;">
-          <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
-            <span class="material-symbols-outlined text-magenta-400" style="color: #d946ef;">lock_reset</span>
-            <h2 class="text-xl font-bold text-white">Security & Password</h2>
-          </div>
-          <div class="p-8">
-            <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
-              <input type="hidden" name="action" value="update_password">
-              
-              <div>
-                <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="current_password">Current Password</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">key</span>
+            <!-- Security Panel -->
+            <div id="card-security" class="tab-card hidden bento-card rounded-xl p-8" style="display: none;">
+              <div class="mb-6 border-b border-outline-variant pb-4">
+                <h3 class="text-xl font-semibold text-on-surface">Security & Authentication</h3>
+                <p class="text-sm text-on-surface-variant mt-1">Update your password to keep your institutional account secure.</p>
+              </div>
+              <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
+                <input type="hidden" name="action" value="update_password">
+                <div class="max-w-md">
+                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide mb-2" for="current_password">Current Password</label>
                   <input type="password" name="current_password" id="current_password" required 
-                         class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                         class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-4 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm" />
                 </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="new_password">New Password</label>
-                  <div class="relative">
-                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">lock</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
+                  <div>
+                    <label class="block text-xs font-bold text-on-surface-variant tracking-wide mb-2" for="new_password">New Password</label>
                     <input type="password" name="new_password" id="new_password" required minlength="6"
-                           class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                           class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-4 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm" />
                   </div>
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="confirm_password">Confirm Password</label>
-                  <div class="relative">
-                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">lock_clock</span>
+                  <div>
+                    <label class="block text-xs font-bold text-on-surface-variant tracking-wide mb-2" for="confirm_password">Confirm New Password</label>
                     <input type="password" name="confirm_password" id="confirm_password" required minlength="6"
-                           class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-inner" />
+                           class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 px-4 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm" />
                   </div>
                 </div>
-              </div>
-              
-              <div class="flex justify-end pt-2">
-                <button type="submit" class="bg-surface-container-highest hover:bg-surface-bright border border-outline-variant text-white px-6 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[18px]">update</span>
-                  Update Password
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        
-        <!-- Budget Preferences Card -->
-        <div id="card-budget" class="tab-card hidden glass-card rounded-2xl overflow-hidden shadow-2xl" style="display: none;">
-          <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
-            <span class="material-symbols-outlined text-green-400">account_balance_wallet</span>
-            <h2 class="text-xl font-bold text-white">Budget Preferences</h2>
-          </div>
-          <div class="p-8">
-            <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
-              <input type="hidden" name="action" value="update_budget">
-              
-              <div>
-                <label class="block text-xs font-bold text-on-surface-variant tracking-wide uppercase mb-2" for="new_budget">Yearly Budget (₹)</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">payments</span>
-                  <input type="number" step="0.01" min="0" name="new_budget" id="new_budget" value="{{ current_user.yearly_budget }}" required 
-                         class="w-full bg-surface border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all shadow-inner" />
+                <div class="pt-4 flex items-center gap-4">
+                  <button type="submit" class="bg-primary text-on-primary hover:bg-primary/90 px-5 py-2 rounded-lg font-semibold transition-all text-sm flex items-center gap-2 active:scale-95">
+                    Update Password
+                  </button>
+                  <span class="text-xs text-on-surface-variant">Requires re-login upon success.</span>
                 </div>
-                <p class="text-xs text-on-surface-variant mt-2">Set your total budget limit for the year. This updates the progress and warnings on your dashboard.</p>
+              </form>
+            </div>
+
+            <!-- Budget Panel -->
+            <div id="card-budget" class="tab-card hidden bento-card rounded-xl p-8" style="display: none;">
+              <div class="mb-6 border-b border-outline-variant pb-4">
+                <h3 class="text-xl font-semibold text-on-surface">Budget Limits</h3>
+                <p class="text-sm text-on-surface-variant mt-1">Configure your fiscal thresholds and warning parameters.</p>
               </div>
-              
-              <div class="flex justify-end pt-2">
-                <button type="submit" class="bg-surface-container-highest hover:bg-surface-bright border border-outline-variant text-white px-6 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[18px]">save</span>
-                  Save Budget
-                </button>
-              </div>
-            </form>
+              <form method="POST" action="{{ url_for('auth.settings') }}" class="space-y-6">
+                <input type="hidden" name="action" value="update_budget">
+                <div class="max-w-md">
+                  <label class="block text-xs font-bold text-on-surface-variant tracking-wide mb-2" for="new_budget">Yearly Institution Budget (₹)</label>
+                  <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-mono-data font-bold">₹</span>
+                    <input type="number" step="0.01" min="0" name="new_budget" id="new_budget" value="{{ current_user.yearly_budget }}" required 
+                           class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-2.5 pl-8 pr-4 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-mono-data" />
+                  </div>
+                </div>
+                <div class="pt-4 flex items-center gap-4">
+                  <button type="submit" class="bg-primary text-on-primary hover:bg-primary/90 px-5 py-2 rounded-lg font-semibold transition-all text-sm flex items-center gap-2 active:scale-95">
+                    Save Budget Limit
+                  </button>
+                </div>
+              </form>
+            </div>
+
           </div>
         </div>
-
       </div>
-    </div>
+    </main>
   </div>
 
   <script>
     function switchTab(tabId) {
-      // Hide all cards safely
+      // Hide all panels
       const cards = document.querySelectorAll('.tab-card');
       for (let i = 0; i < cards.length; i++) {
         cards[i].classList.add('hidden');
         cards[i].style.display = 'none';
       }
       
-      // Reset all buttons safely
+      // Reset tabs
       const btns = document.querySelectorAll('.tab-btn');
       for (let i = 0; i < btns.length; i++) {
-        btns[i].className = 'tab-btn w-full text-left px-4 py-3 rounded-xl text-on-surface hover:bg-surface-container-high font-medium flex items-center gap-3 transition-colors mt-1';
+        btns[i].className = 'tab-btn w-full text-left px-4 py-2.5 rounded-r-full text-sm transition-all settings-tab-inactive flex items-center gap-3';
       }
 
-      // Show selected card
+      // Show selected panel
       const selected = document.getElementById('card-' + tabId);
       if (selected) {
         selected.classList.remove('hidden');
         selected.style.display = 'block';
       }
       
-      // Highlight selected button
+      // Highlight selected tab
       const activeBtn = document.getElementById('btn-' + tabId);
       if (activeBtn) {
-        activeBtn.className = 'tab-btn w-full text-left px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold flex items-center gap-3 transition-colors mt-1';
+        activeBtn.className = 'tab-btn w-full text-left px-4 py-2.5 rounded-r-full text-sm transition-all settings-tab-active flex items-center gap-3';
       }
     }
-
-    // Ensure the state matches initially on load
-    document.addEventListener('DOMContentLoaded', function() {
-      // If there's an error message for password, we might want to stay on the security tab,
-      // but for now default to profile
-      switchTab('profile');
-    });
   </script>
 </body>
 </html>

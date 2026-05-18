@@ -617,7 +617,7 @@
                     <span class="material-symbols-outlined text-primary text-sm mt-0.5" data-icon="receipt">receipt</span>
                     <div>
                         <p class="font-semibold text-on-surface">Transaction Approved: {{ tx.title }}</p>
-                        <p class="text-[10px] text-on-surface-variant/70 mt-0.5">Amount: ₹{{ "{:,.2f}".format(tx.amount) }} • Approved on {{ tx.date|string }}</p>
+                        <p class="text-[10px] text-on-surface-variant/70 mt-0.5">Amount: ₹{{ "{:,.2f}".format(tx.amount) }} • Approved on {{ tx.expense_date.strftime('%b %d, %Y') }}</p>
                     </div>
                 </div>
                 {% endfor %}
