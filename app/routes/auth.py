@@ -71,6 +71,13 @@ def settings():
             except ValueError:
                 flash('Invalid budget amount.', 'danger')
             return redirect(url_for('auth.settings'))
+        elif action == 'update_theme':
+            theme = request.form.get('theme')
+            if theme in ['light', 'dark']:
+                current_user.theme = theme
+                db.session.commit()
+                return {'success': True}
+            return {'success': False, 'error': 'Invalid theme'}, 400
             
     return render_template('auth/settings.html')
 

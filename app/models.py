@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='Staff')
     yearly_budget = db.Column(db.Float, nullable=False, default=1000000.0)
+    theme = db.Column(db.String(10), nullable=False, default='light')
 
     def __repr__(self):
         return f'<User {self.username}>'
