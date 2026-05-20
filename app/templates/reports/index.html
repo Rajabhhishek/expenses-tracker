@@ -351,7 +351,7 @@
 <span class="material-symbols-outlined" data-icon="download">download</span>
 <span class="font-label-md text-label-md">Export PDF</span>
 </button>
-<button class="flex items-center gap-2 px-lg py-2 bg-surface-container-high border border-outline-variant rounded-lg text-secondary hover:bg-surface-container-highest transition-colors">
+<button onclick="downloadExcel()" class="flex items-center gap-2 px-lg py-2 bg-surface-container-high border border-outline-variant rounded-lg text-secondary hover:bg-surface-container-highest transition-colors">
 <span class="material-symbols-outlined" data-icon="table_chart">table_chart</span>
 <span class="font-label-md text-label-md">Export Excel</span>
 </button>
@@ -617,6 +617,12 @@
       if (exportBtn) exportBtn.style.visibility = 'visible';
       if (calendarBtn) calendarBtn.style.visibility = 'visible';
     });
+  }
+
+  function downloadExcel() {
+    const picker = document.getElementById('month-picker');
+    const monthVal = picker ? picker.value : '{{ current_month_val }}';
+    window.location.href = '/reports/export/excel?month=' + monthVal;
   }
 </script>
 </body></html>

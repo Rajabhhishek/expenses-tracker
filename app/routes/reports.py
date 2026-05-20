@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, Response
 from flask_login import login_required, current_user
 from app.models import Expense, Category
 from app import db
 from sqlalchemy import func
 from datetime import datetime
 import calendar
+import csv
+from io import StringIO
 
 reports_bp = Blueprint('reports', __name__)
 
@@ -122,4 +124,54 @@ def index():
         active_audits=active_audits,
         discrepancies=discrepancies
     )
+
+@reports_bp.route('/export/excel')
+@login_required
+def export_excel():
+    # Parse month selection, default to May 2026
+    selected_month_str = request.args.get('month', '2026-05')
+    try:
+        dt = datetime.strptime(selected_month_str, '%Y-%m')
+        year = dt.year
+        month_num = dt.month
+    except ValueError:
+        year = 2026
+        month_num = 5
+        selected_month_str = '2026-05'
+
+    # Get all expenses for this month
+    expenses = Expense.query.filter(
+        func.strftime('%Y-%m', Expense.expense_date) == selected_month_str
+    ).order_by(Expense.expense_date.desc()).all()
+
+    # Generate CSV in memory
+    si = StringIO()
+    cw = csv.writer(si)
+    
+    # Write header matching institutional audit details
+    cw.writerow(['Audit ID', 'Date', 'Entity / Vendor', 'Category', 'Payment Method', 'Amount (INR)', 'Description', 'Logged By'])
+    
+    for tx in expenses:
+        category_name = tx.category.name if tx.category else 'Uncategorized'
+        user_name = tx.user.username if tx.user else 'System'
+        cw.writerow([
+            f"AUD-{tx.id + 2940}",
+            tx.expense_date.strftime('%Y-%m-%d') if tx.expense_date else '',
+            tx.title,
+            category_name,
+            tx.payment_method,
+            tx.amount,
+            tx.description or '',
+            user_name
+        ])
+    
+    output = si.getvalue()
+    
+    # Send CSV with UTF-8 BOM so Excel opens it with correct formatting
+    response = Response(
+        "\ufeff" + output,
+        mimetype="text/csv",
+        headers={"Content-disposition": f"attachment; filename=Wisdom_Finance_Expenses_{selected_month_str}.csv"}
+    )
+    return response
 
